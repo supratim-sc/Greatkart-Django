@@ -7,5 +7,9 @@ class Category(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='photos/categories', blank=True)
 
+    class Meta:
+        # Changing plural name from 'Categorys' to 'Categories'
+        verbose_name_plural = 'Categories'
+
     def __str__(self) -> str:
         return self.name
