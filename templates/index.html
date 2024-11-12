@@ -1,4 +1,24 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+<!-- extending base template -->
+{% extends 'base.html' %}
+<!-- loading static files -->
+{% load static %}
+
+<!-- Start of content block -->
+{% block content %}
+
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm">
+  <div class="container">
+    <div class="intro-banner-wrap">
+      <img
+        src="{% static 'images/banners/1.jpg' %}"
+        class="img-fluid rounded"
+      />
+    </div>
+  </div>
+  <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
 <section class="section-name padding-y-sm">
   <div class="container">
     <header class="section-heading">

@@ -32,13 +32,15 @@
             <div class="filter-content collapse show" id="collapse_1" style="">
               <div class="card-body">
                 <ul class="list-menu">
-                  <li><a href="#">People </a></li>
-                  <li><a href="#">Watches </a></li>
-                  <li><a href="#">Cinema </a></li>
-                  <li><a href="#">Clothes </a></li>
-                  <li><a href="#">Home items </a></li>
-                  <li><a href="#">Animals</a></li>
-                  <li><a href="#">People </a></li>
+                  <li>
+                    <a href="{% url 'store' %}">All products</a>
+                  </li>
+                  <!-- Using context processor -->
+                  {% for category in categories %}
+                  <li>
+                    <a href="{{ category.get_url }}">{{ category.name }} </a>
+                  </li>
+                  {% endfor %}
                 </ul>
               </div>
               <!-- card-body.// -->
