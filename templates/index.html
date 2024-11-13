@@ -33,7 +33,7 @@
       {% for product in products %}
       <div class="col-md-3">
         <div class="card card-product-grid">
-          <a href="./product-detail.html" class="img-wrap">
+          <a href="{{ product.get_url }}" class="img-wrap">
             <img src="{{ product.images.url }}" />
           </a>
           <figcaption class="info-wrap">
