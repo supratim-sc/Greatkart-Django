@@ -25,14 +25,20 @@ def cart(request):
         # iterating over cart items
         for cartitem in cart_items:
             total += cartitem.product.price * cartitem.quantity
+
     # if cartitem does not present
     except CartItem.DoesNotExist:
         # do nothing and use the predefined values 0 and None
         pass
     
+    tax = total * 0.02
+    grand_total = total + tax
+
     context = {
-        'total': total,
         'cart_items': cart_items,
+        'total': total,
+        'tax': tax,
+        'grand_total': grand_total,
     }
 
     return render(request, 'store/cart.html', context)
