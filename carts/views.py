@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cart, CartItem
 from store.models import Product
 
@@ -81,4 +81,21 @@ def add_to_cart(request, product_id):   # passing product_if from product_detail
     cartitem.save()
 
     # taking the customer to the cart page
+    return redirect('cart')
+
+# implement minus button functionality  to decrement product quantity in cart page
+def decrement_item_count(request, product_id):
+    cart = Cart.objects.get(cart_id=_get_cart_id(request))
+    product = get_object_or_404(Product, id=product_id)
+    cart_item = CartItem.objects.get(cart=cart, product=product)
+
+    # if quantity is more than 1, decrement the qunatity by 1
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+
+    # if quantity is only 1, delete the cart item
+    else:
+        cart_item.delete()
+
     return redirect('cart')

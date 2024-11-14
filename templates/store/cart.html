@@ -48,13 +48,14 @@
                   <div class="col">
                     <div class="input-group input-spinner">
                       <div class="input-group-prepend">
-                        <button
+                        <a
+                          href="{% url 'decrement_item_count' cart_item.product.id %}"
                           class="btn btn-light"
                           type="button"
-                          id="button-plus"
+                          id="button-minua"
                         >
                           <i class="fa fa-minus"></i>
-                        </button>
+                        </a>
                       </div>
                       <input
                         type="text"
@@ -66,7 +67,7 @@
                           href="{% url 'add_to_cart' cart_item.product.id %}"
                           class="btn btn-light"
                           type="button"
-                          id="button-minus"
+                          id="button-plus"
                         >
                           <i class="fa fa-plus"></i>
                         </a>
