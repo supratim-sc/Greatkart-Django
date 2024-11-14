@@ -62,13 +62,14 @@
                         value="{{ cart_item.quantity }}"
                       />
                       <div class="input-group-append">
-                        <button
+                        <a
+                          href="{% url 'add_to_cart' cart_item.product.id %}"
                           class="btn btn-light"
                           type="button"
                           id="button-minus"
                         >
                           <i class="fa fa-plus"></i>
-                        </button>
+                        </a>
                       </div>
                     </div>
                     <!-- input-group.// -->
