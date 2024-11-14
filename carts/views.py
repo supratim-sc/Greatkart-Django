@@ -3,10 +3,6 @@ from .models import Cart, CartItem
 from store.models import Product
 
 # Create your views here.
-def cart(request):
-    return render(request, 'store/cart.html')
-
-# creating a private function to get the cart_id. Here _ means private function
 def _get_cart_id(request):
     # getting the from session_key
     cart = request.session.session_key
@@ -18,6 +14,30 @@ def _get_cart_id(request):
 
     # returning the cart
     return cart
+
+def cart(request):
+    total = 0
+    cart_items = None
+    try:
+        # getting the cart items
+        cart = Cart.objects.get(cart_id = _get_cart_id(request))
+        cart_items = CartItem.objects.filter(cart=cart)
+        # iterating over cart items
+        for cartitem in cart_items:
+            total += cartitem.product.price * cartitem.quantity
+    # if cartitem does not present
+    except CartItem.DoesNotExist:
+        # do nothing and use the predefined values 0 and None
+        pass
+    
+    context = {
+        'total': total,
+        'cart_items': cart_items,
+    }
+
+    return render(request, 'store/cart.html', context)
+
+# creating a private function to get the cart_id. Here _ means private function
 
 def add_to_cart(request, product_id):   # passing product_if from product_details.html page
     # fetching the product
