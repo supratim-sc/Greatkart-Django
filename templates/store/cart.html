@@ -59,6 +59,7 @@
                       </div>
                       <input
                         type="text"
+                        disabled
                         class="form-control"
                         value="{{ cart_item.quantity }}"
                       />
@@ -87,7 +88,12 @@
                   <!-- price-wrap .// -->
                 </td>
                 <td class="text-right">
-                  <a href="" class="btn btn-danger"> Remove</a>
+                  <a
+                    href="{% url 'remove_cart_item' cart_item.product.id %}"
+                    class="btn btn-danger"
+                  >
+                    Remove</a
+                  >
                 </td>
               </tr>
               {% endfor %}
