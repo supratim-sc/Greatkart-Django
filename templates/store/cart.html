@@ -40,9 +40,20 @@
                       />
                     </div>
                     <figcaption class="info">
-                      <a href="#" class="title text-dark"
+                      <!-- Way 1 -->
+                      <a
+                        href="{{ cart_item.product.get_url }}"
+                        class="title text-dark"
                         >{{ cart_item.product }}</a
                       >
+                      <!-- Way 2 -->
+                      <!-- 
+                      <a
+                        href="{% url 'product_details' cart_item.product.category.slug cart_item.product.slug %}"
+                        class="title text-dark"
+                        >{{ cart_item.product }}</a
+                      > 
+                      -->
                       <p class="text-muted small">
                         Color: Blue <br />
                         Size: XL
