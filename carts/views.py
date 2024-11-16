@@ -27,7 +27,7 @@ def cart(request):
             total += cartitem.product.price * cartitem.quantity
 
     # if cartitem does not present
-    except CartItem.DoesNotExist:
+    except Cart.DoesNotExist:
         # do nothing and use the predefined values 0 and None
         pass
     
