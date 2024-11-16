@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .models import Product
 from category.models import Category
 from carts.models import Cart, CartItem
@@ -11,10 +12,23 @@ def store(request, category_slug=None):
         products = Product.objects.filter(category=category, is_available=True)
     else:
         products = Product.objects.filter(is_available=True)
+        
+    # --- PAGINATION CONFIGURATION ---
+    # creating object of paginator class
+    paginator = Paginator(products, 3) # here 3 is the number of products per page
+
+    # getting the page number from the url like "/?page="
+    ''' here request.GET.get() is used as for first page we don't have '/?page=' 
+    so, if used requset.GET['page] will show error, hence request.GET.get('page)'''
+    page = request.GET.get('page')  
+
+    # configuring products per page based on paginator configuration
+    paged_products = paginator.get_page(page)
     
     products_count = products.count()
     context = {
-        'products' : products,
+        # 'products' : products,
+        'products' : paged_products,     # instead of sending all products, sending paged_products only
         'products_count' : products_count,
     }
 
