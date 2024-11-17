@@ -4,7 +4,12 @@
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
   <div class="container">
+    <!-- if searching the show 'Search Results' else show 'Our Store' -->
+    {% if 'search' in request.path %}
+    <h2 class="title-page">Search Results</h2>
+    {% else %}
     <h2 class="title-page">Our Store</h2>
+    {% endif %}
   </div>
   <!-- container //  -->
 </section>
@@ -149,7 +154,8 @@
           </div>
         </header>
         <!-- sect-heading -->
-
+        <!-- If we have any product then show  those products -->
+        {% if products %}
         <div class="row">
           {% for product in products %}
           <div class="col-md-4">
@@ -182,7 +188,15 @@
           {% endfor %}
         </div>
         <!-- row end.// -->
-
+        <!-- If no products found -->
+        {% else %}
+        <div class="container text-center">
+          <h2>
+            No Products found. <br />
+            Try again.
+          </h2>
+        </div>
+        {% endif %}
         <nav class="mt-4" aria-label="Page navigation sample">
           <!-- checking if has next page then show pagination else don't need to show-->
           {% if products.has_other_pages %}
@@ -222,7 +236,7 @@
             <!-- checking if has next page then show button with link to previous page -->
             {% if products.has_next %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ products.next_page_number }}"
+              <a class="page-link" href="page={{ products.next_page_number }}"
                 >Next</a
               >
             </li>
