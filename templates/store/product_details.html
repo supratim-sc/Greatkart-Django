@@ -19,96 +19,99 @@
           <!-- gallery-wrap .end// -->
         </aside>
         <main class="col-md-6 border-left">
-          <article class="content-body">
-            <h2 class="title">{{ product.name }}</h2>
+          <!-- Implementing form to submit the product with variation -->
+          <form action="{% url 'add_to_cart' product.id %}" method="GET">
+            <article class="content-body">
+              <h2 class="title">{{ product.name }}</h2>
 
-            <div class="mb-3">
-              <var class="price h4">₹ {{ product.price }}</var>
-            </div>
+              <div class="mb-3">
+                <var class="price h4">₹ {{ product.price }}</var>
+              </div>
 
-            <p>{{ product.description }}</p>
+              <p>{{ product.description }}</p>
 
-            <hr />
-            <div class="row">
-              <div class="item-option-select">
-                <h6>Choose Color</h6>
-                <div
-                  class="btn-group btn-group-sm btn-group-toggle"
-                  data-toggle="buttons"
-                >
-                  <label class="btn btn-light">
-                    <input type="radio" name="radio_color" /> Silver
-                  </label>
-                  <label class="btn btn-light">
-                    <input type="radio" name="radio_color" /> Gray
-                  </label>
-                  <label class="btn btn-light active">
-                    <input type="radio" name="radio_color checked" /> Gold
-                  </label>
-                  <label class="btn btn-light">
-                    <input type="radio" name="radio_color" /> Black
-                  </label>
+              <hr />
+              <div class="row">
+                <div class="item-option-select">
+                  <h6>Choose Color</h6>
+                  <div
+                    class="btn-group btn-group-sm btn-group-toggle flex-wrap"
+                    data-toggle="buttons"
+                  >
+                    {# As we have a foreignkey relationship from product to productvariation, as we haven't set related name, #}
+                    {# so,to access the productvariation table from the product table attribute, #}
+                    {# we need to use '_set' at the end of productvariation and #}
+                    {# then we can access the attributes and functions of productvariation table with product class object. #}
+                    <!-- RADIO options for colors -->
+                    {% for color in product.productvariation_set.colors %}
+                    <label class="btn btn-light">
+                      <input
+                        type="radio"
+                        name="radio_color"
+                        value="{{ color.variation_value | capfirst }}"
+                      />
+                      {# here, color is a queryset, so from queryset we are taking variation_value field #}
+                      <!-- capfirst converts first letter to capital and rest in small -->
+                      {{ color.variation_value | capfirst}}
+                    </label>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- row.// -->
-            <div class="row">
-              <div class="item-option-select">
-                <h6>Select Size</h6>
-                <div
-                  class="btn-group btn-group-sm btn-group-toggle"
-                  data-toggle="buttons"
-                >
-                  <label class="btn btn-light">
-                    <input type="radio" name="radio_color" /> S
-                  </label>
-                  <label class="btn btn-light active">
-                    <input type="radio" name="radio_color" checked /> M
-                  </label>
-                  <label class="btn btn-light">
-                    <input type="radio" name="radio_color" /> L
-                  </label>
-                  <label class="btn btn-light">
-                    <input type="radio" name="radio_color" /> XL
-                  </label>
+              <!-- row.// -->
+              <div class="row">
+                <div class="item-option-select">
+                  <h6>Select Size</h6>
+                  <div
+                    class="btn-group btn-group-sm btn-group-toggle flex-wrap"
+                    data-toggle="buttons"
+                  >
+                    {% for size in product.productvariation_set.sizes %}
+                    <label class="btn btn-light">
+                      <input
+                        type="radio"
+                        name="radio_color"
+                        value="{{ size.variation_value | capfirst }}"
+                      />
+                      {{ size.variation_value | capfirst }}
+                    </label>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- row.// -->
-            <hr />
-            {% if product.stock <= 0 %}
-            <h5 class="text-danger">Out of stock</h5>
-
-            {% else %}
-            <!-- if stock of the product is more than 0 -->
-            {% if is_cart_item %}
-            <!-- if product is already in cart then -->
-            <!-- show added to cart button -->
-            <a href="#" class="btn btn-success">
-              <span class="text">Added to cart</span>
-              <i class="fas fa-check"></i>
-            </a>
-            <!-- and go to cart button -->
-            <a href="{% url 'cart' %}" class="btn btn-outline-primary">
-              <span class="text">View cart</span>
-              <i class="fas fa-eye"></i>
-            </a>
-            {% else %}
-            <!-- if product is not in the cart, then showing add to cart button -->
-            <!-- passing product_id to add_to_cart url of cart app -->
-            <a
-              href="{% url 'add_to_cart' product.id %}"
-              class="btn btn-primary"
-            >
-              <span class="text">Add to cart</span>
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-            <!-- end inner if -->
-            {% endif %}
-            <!-- end outer if -->
-            {% endif %}
-          </article>
-          <!-- product-info-aside .// -->
+              <!-- row.// -->
+              <hr />
+              {% if product.stock <= 0 %}
+                <h5 class="text-danger">Out of stock</h5>
+              {% else %}
+              <!-- if the product has more than 0 stock -->
+                  {% if is_cart_item %}
+                      <!-- if product is already in cart then -->
+                      <!-- show added to cart button -->
+                      <a href="#" class="btn btn-success">
+                        <span class="text">Added to cart</span>
+                        <i class="fas fa-check"></i>
+                      </a>
+                      <!-- and go to cart button -->
+                      <a href="{% url 'cart' %}" class="btn btn-outline-primary">
+                        <span class="text">View cart</span>
+                        <i class="fas fa-eye"></i>
+                      </a>
+                  {% else %}
+                      <!-- if product is not in the cart, then showing add to cart button -->
+                      <!-- as using form hence using button to submit the form instead of anchor tag -->
+                      <button type="submit" class="btn btn-primary">
+                        <span class="text"
+                          >Add to cart <i class="fas fa-shopping-cart"></i
+                        ></span>
+                      </button>
+                      <!-- end inner if -->
+                      {% endif %}
+              <!-- end outer if -->
+              {% endif %}
+            </article>
+            <!-- product-info-aside .// -->
+          </form>
         </main>
         <!-- col.// -->
       </div>
