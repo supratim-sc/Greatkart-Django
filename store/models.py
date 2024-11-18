@@ -20,7 +20,18 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
 
+# Custom PRoduct Variation Manager
+class ProductVariationManager(models.Manager):  # inherits from models.Manager, which is the base class for Django's model managers.
+    # override the default query behavior by calling super().filter() to apply custom filters based on the variation_category and is_active fields.
+    def colors(self):
+        return super().filter(variation_category='color', is_active=True)
+    
+    # override the default query behavior by calling super().filter() to apply custom filters based on the variation_category and is_active fields.
+    def sizes(self):
+        return super().filter(variation_category='size', is_active=True)
+    
 
 
 product_variation_category_choices = (
@@ -28,12 +39,17 @@ product_variation_category_choices = (
     ('size', 'Size'),
 )
 
+
 class ProductVariation(models.Model):
     product = models.ForeignKey(Product, models.CASCADE)
     variation_category = models.CharField(max_length=50, choices=product_variation_category_choices)
     variation_value = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # Custom Manager is assigned to the objects attribute, which means any query on ProductVariation.objects will use ProductVariationManager's methods, not the default methods. 
+    # So, essentially extending the model's functionality with custom query methods, improving code reusability and readability.
+    objects = ProductVariationManager()
 
     def __str__(self):
         return self.product.name
