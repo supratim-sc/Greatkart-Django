@@ -55,8 +55,10 @@
                       > 
                       -->
                       <p class="text-muted small">
-                        Color: Blue <br />
-                        Size: XL
+                        {# looping over the product variations and show #}
+                        {% for product_variation in cart_item.product_variations.all %}
+                          {{ product_variation.variation_category }} : {{ product_variation.variation_value }} <br />
+                        {% endfor %}
                       </p>
                     </figcaption>
                   </figure>

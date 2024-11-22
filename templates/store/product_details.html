@@ -86,29 +86,12 @@
                 <h5 class="text-danger">Out of stock</h5>
               {% else %}
               <!-- if the product has more than 0 stock -->
-                  {% if is_cart_item %}
-                      <!-- if product is already in cart then -->
-                      <!-- show added to cart button -->
-                      <a href="#" class="btn btn-success">
-                        <span class="text">Added to cart</span>
-                        <i class="fas fa-check"></i>
-                      </a>
-                      <!-- and go to cart button -->
-                      <a href="{% url 'cart' %}" class="btn btn-outline-primary">
-                        <span class="text">View cart</span>
-                        <i class="fas fa-eye"></i>
-                      </a>
-                  {% else %}
-                      <!-- if product is not in the cart, then showing add to cart button -->
-                      <!-- as using form hence using button to submit the form instead of anchor tag -->
-                      <button type="submit" class="btn btn-primary">
-                        <span class="text"
-                          >Add to cart <i class="fas fa-shopping-cart"></i
-                        ></span>
-                      </button>
-                      <!-- end inner if -->
-                      {% endif %}
-              <!-- end outer if -->
+              <button type="submit" class="btn btn-primary">
+                <span class="text"
+                  >Add to cart <i class="fas fa-shopping-cart"></i
+                ></span>
+              </button>
+              <!-- end if -->
               {% endif %}
             </article>
             <!-- product-info-aside .// -->

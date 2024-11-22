@@ -93,6 +93,14 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
             cart=cart,
             quantity=1,
         )
+
+    # adding product variation to the cart item
+    if product_variations_list: # if we have any variation of the product
+        
+        # clearing the product_variation before adding a new variation
+        cartitem.product_variations.clear()
+        for variation in product_variations_list:
+            cartitem.product_variations.add(variation)
         
     # saving the cartitem
     cartitem.save()
