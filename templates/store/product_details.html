@@ -48,7 +48,7 @@
                     <label class="btn btn-light">
                       <input
                         type="radio"
-                        name="radio_color"
+                        name="color"
                         value="{{ color.variation_value | capfirst }}"
                       />
                       {# here, color is a queryset, so from queryset we are taking variation_value field #}
@@ -71,7 +71,7 @@
                     <label class="btn btn-light">
                       <input
                         type="radio"
-                        name="radio_size"
+                        name="size"
                         value="{{ size.variation_value | capfirst }}"
                       />
                       {{ size.variation_value | capfirst }}

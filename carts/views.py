@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cart, CartItem
-from store.models import Product
+from store.models import Product, ProductVariation
 
 # Create your views here.
 def _get_cart_id(request):
@@ -46,11 +46,22 @@ def cart(request):
 # creating a private function to get the cart_id. Here _ means private function
 
 def add_to_cart(request, product_id):   # passing product_id from product_details.html page
-    if request.method == 'POST':
-        print(request.POST['radio_color'], request.POST['radio_size'])
-        
     # fetching the product
     product = Product.objects.get(id=product_id)
+
+    if request.method == 'POST':
+        # taking all key and value pair as if in future we introduce brand or any other variation, 
+        # then also our code will work
+        for key, value in request.POST.items():
+            # checking if the key and value matches with the variation_catogory and variation_value of ProductVariation model
+            try:
+                variation = ProductVariation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                print(variation)
+
+            # if key and value doesnot match like csrfmiddlewaretoken, then do nothing and just skip
+            except:
+                pass
+        
 
     # getting the cart, if not then create cart
     try:

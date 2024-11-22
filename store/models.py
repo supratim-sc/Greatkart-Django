@@ -52,4 +52,4 @@ class ProductVariation(models.Model):
     objects = ProductVariationManager()
 
     def __str__(self):
-        return self.product.name
+        return self.variation_value
