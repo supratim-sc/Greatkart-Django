@@ -45,7 +45,10 @@ def cart(request):
 
 # creating a private function to get the cart_id. Here _ means private function
 
-def add_to_cart(request, product_id):   # passing product_if from product_details.html page
+def add_to_cart(request, product_id):   # passing product_id from product_details.html page
+    if request.method == 'POST':
+        print(request.POST['radio_color'], request.POST['radio_size'])
+        
     # fetching the product
     product = Product.objects.get(id=product_id)
 

@@ -20,7 +20,8 @@
         </aside>
         <main class="col-md-6 border-left">
           <!-- Implementing form to submit the product with variation -->
-          <form action="{% url 'add_to_cart' product.id %}" method="GET">
+          <form action="{% url 'add_to_cart' product.id %}" method="POST">
+            {% csrf_token %}
             <article class="content-body">
               <h2 class="title">{{ product.name }}</h2>
 
@@ -70,7 +71,7 @@
                     <label class="btn btn-light">
                       <input
                         type="radio"
-                        name="radio_color"
+                        name="radio_size"
                         value="{{ size.variation_value | capfirst }}"
                       />
                       {{ size.variation_value | capfirst }}
