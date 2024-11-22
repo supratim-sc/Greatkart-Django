@@ -49,6 +49,9 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
     # fetching the product
     product = Product.objects.get(id=product_id)
 
+    # for storing product variations for a particular product
+    product_variations_list = []
+
     if request.method == 'POST':
         # taking all key and value pair as if in future we introduce brand or any other variation, 
         # then also our code will work
@@ -56,7 +59,7 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
             # checking if the key and value matches with the variation_catogory and variation_value of ProductVariation model
             try:
                 variation = ProductVariation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
-                print(variation)
+                product_variations_list.append(variation)
 
             # if key and value doesnot match like csrfmiddlewaretoken, then do nothing and just skip
             except:
