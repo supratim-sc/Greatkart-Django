@@ -122,7 +122,8 @@
                 </td>
                 <td class="text-right">
                   <a
-                    href="{% url 'remove_cart_item' cart_item.product.id %}"
+                    href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"
+                    onclick="return confirm('Are you sure to delete this item?')"
                     class="btn btn-danger"
                   >
                     Remove</a
