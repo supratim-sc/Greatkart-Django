@@ -69,7 +69,7 @@
                     <div class="input-group input-spinner">
                       <div class="input-group-prepend">
                         <a
-                          href="{% url 'decrement_item_count' cart_item.product.id %}"
+                          href="{% url 'decrement_item_count' cart_item.product.id cart_item.id %}"
                           class="btn btn-light"
                           type="button"
                           id="button-minua"

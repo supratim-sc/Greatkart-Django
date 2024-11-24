@@ -161,19 +161,26 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
     return redirect('cart')
 
 # implement minus button functionality  to decrement product quantity in cart page
-def decrement_item_count(request, product_id):
+def decrement_item_count(request, product_id, cart_item_id):
     cart = Cart.objects.get(cart_id=_get_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
-    cart_item = CartItem.objects.get(cart=cart, product=product)
 
-    # if quantity is more than 1, decrement the qunatity by 1
-    if cart_item.quantity > 1:
-        cart_item.quantity -= 1
-        cart_item.save()
+    # if found cart_item with the cart, product and id then decrement ite's count by 1
+    try:
+        cart_item = CartItem.objects.get(cart=cart, product=product, id=cart_item_id)
 
-    # if quantity is only 1, delete the cart item
-    else:
-        cart_item.delete()
+        # if quantity is more than 1, decrement the qunatity by 1
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+
+        # if quantity is only 1, delete the cart item
+        else:
+            cart_item.delete()
+
+    # if not found cart_item with the cart, product and id then do nothing
+    except:
+        pass
 
     return redirect('cart')
 
