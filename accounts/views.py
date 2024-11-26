@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm
 from .models import Account
 
@@ -78,3 +79,17 @@ def login(request):
         
     
     return render(request, 'accounts/login.html')
+
+
+# this decorator will check for if the user is logged in or not, 
+# if logged in the run the function logout() else redirect user to login page url
+@login_required(login_url='login')
+def logout(request):
+    # logging out the user
+    auth.logout(request)
+
+    # showing logout message
+    messages.success(request, 'Logged out successfully!!')
+
+    # reddirecting the user to the login page after logging out
+    return redirect('login')
