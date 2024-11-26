@@ -58,3 +58,9 @@ $(document).ready(function() {
 }); 
 // jquery end
 
+// TimeOut function to automatically close the alert box
+setTimeout(function(){
+    // getting the id message of alerts.html and fading out the message slowly after 2 seconds
+    $('#message').fadeOut('slow')
+    
+}, 2000)

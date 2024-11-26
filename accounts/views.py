@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .forms import RegistrationForm
 from .models import Account
 
@@ -31,6 +32,12 @@ def register(request):
 
             # saving the user
             user.save()
+
+            # showing success message
+            messages.success(request, 'Registration Successful!!')
+
+            # redirecting the user to registration page
+            return redirect('register')
 
     else:
         form = RegistrationForm()
