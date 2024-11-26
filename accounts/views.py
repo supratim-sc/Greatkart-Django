@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.contrib import messages, auth
 from .forms import RegistrationForm
 from .models import Account
 
@@ -47,3 +47,34 @@ def register(request):
     }
 
     return render(request, 'accounts/register.html', context)
+
+def login(request):
+    # Checking if POST request
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        # Authenticating the user with the provided email and password
+        user = auth.authenticate(email=email, password=password)
+
+        # checking if user is found with the provided credentials or not
+        if user:
+            # if user found, then logging in the user
+            auth.login(request, user)
+
+            # showing login successful message
+            messages.success(request, 'Logged in successfully!!')
+
+            # redirecting the user to the home page
+            return redirect('login')
+        
+        # if user not founf with the provided credentials
+        else:
+            # showing error message
+            messages.error(request, 'Invalid credentials!!')
+
+            # taking back the user to the login page again
+            return redirect('login')
+        
+    
+    return render(request, 'accounts/login.html')

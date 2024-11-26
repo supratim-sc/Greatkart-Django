@@ -94,14 +94,34 @@
         <!-- col.// -->
         <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
           <div class="d-flex justify-content-end mb-3 mb-lg-0">
-            <div class="widget-header">
-              <small class="title text-muted">Welcome guest!</small>
-              <div>
-                <a href="{% static './signin.html' %}">Sign in</a>
-                <span class="dark-transp"> | </span>
-                <a href="{% url 'register' %}"> Register</a>
+
+            {# In Django, the user object is available to all templates by default because it is part of the context passed to templates in each request. The user object represents the currently authenticated user, and Django automatically makes it accessible in the context of templates to allow easy access to the user's information. #}
+            
+            {# Context Processor (django.contrib.auth.context_processors.auth): Django includes a context processor by default, called auth, which adds the user object (along with other authentication-related information like perms, messages, etc.) to the template context The context processor is defined in the TEMPLATES setting in settings.py under the context_processors key.  #}
+
+            {# checking if any user is logged in then showing Dashboard and Logout options #}
+            {% if user.id %}
+              <div class="widget-header">
+                <small class="title text-muted">Welcome {{ user.first_name }}</small>
+                <div>
+                  <a href="#">Dashboard</a>
+                  <span class="dark-transp"> | </span>
+                  <a href="#"> Logout</a>
+                </div>
               </div>
-            </div>
+
+            {# if no user is logged in then showing Sign in and Register options #}
+            {% else %}
+              <div class="widget-header">
+                <small class="title text-muted">Welcome guest!</small>
+                <div>
+                  <a href="{% url 'login' %}">Sign in</a>
+                  <span class="dark-transp"> | </span>
+                  <a href="{% url 'register' %}"> Register</a>
+                </div>
+              </div>
+            {% endif %}
+            
             <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
               <div class="icon icon-sm rounded-circle border">
                 <i class="fa fa-shopping-cart"></i>
