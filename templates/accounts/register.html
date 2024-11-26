@@ -59,6 +59,21 @@
         </div>
         <!-- form-group// -->
       </form>
+
+      <!-- TYPES OF ERRORS -->
+      {# in django forms there are two types of errors :- field_error and non_field_error #}
+      {# field_error :- These errors are added to a field when the input value is invalid according to the rules set for that field, like email field value is unique or not #}
+      {# non_field_error :- These errors are custom defined errors like password and confirm_password same or not checking . #}
+
+      <!-- Showing field errors -->
+      {# as per our form we only have field validation on email field, we can directly access and show error if error occurs #}
+      <span class="text-danger">{{ form.email.errors }}</span>
+
+      <!-- Showing non field errors -->
+      {# showing our custom field validation errors #}
+      <span class="text-danger">{{ form.non_field_errors }}</span>
+          
+      </div>
     </article>
     <!-- card-body.// -->
   </div>
