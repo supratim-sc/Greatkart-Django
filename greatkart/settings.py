@@ -146,3 +146,16 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: "danger",   # if ERROR message then danger will be shown as per bootstrap
 }
+
+
+# SMTP Configuration
+
+# SMTP server settings for Gmail
+EMAIL_HOST = 'smtp.gmail.com'  # Gmail's SMTP server
+EMAIL_PORT = 587  # SMTP port for TLS
+EMAIL_HOST_USER = os.environ['EMAIL_USERNAME']  # Your Gmail email address
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']  # Your email password or app password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
+EMAIL_USE_TLS = True  # Use TLS (Transport Layer Security)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
+

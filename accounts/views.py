@@ -1,6 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
+
+# EMAIL MESSAGE imports
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMessage
+
 from .forms import RegistrationForm
 from .models import Account
 
@@ -33,6 +42,33 @@ def register(request):
 
             # saving the user
             user.save()
+
+            # AUTHENTICATING user with activation link
+            # getting the current site, which we will use in the email
+            current_site = get_current_site(request)
+
+            # Subject of the email
+            email_subject = f'Please activate your {current_site} account'
+
+            # Creating email message
+            email_message = render_to_string(       # rendering a template to a string, rather than returning an HTTP response
+                'accounts/account_verification_email.html',
+                {
+                    'user' : user,
+                    'current_site' : current_site,
+                    'encoded_user_id' : urlsafe_base64_encode(force_bytes(user.id)),
+                    'token' : default_token_generator.make_token(user),
+                }   # passing values to the template to make encoded link for activation
+            )
+
+            # the user given email address from the registation form
+            to_email = email
+
+            # Creating EmailMessage object with the set data
+            send_email = EmailMessage(email_subject, email_message, to=[to_email])
+
+            # Sending the mail
+            send_email.send()
 
             # showing success message
             messages.success(request, 'Registration Successful!!')
@@ -93,3 +129,8 @@ def logout(request):
 
     # reddirecting the user to the login page after logging out
     return redirect('login')
+
+
+
+def activate(request, uidb64, token):
+    return
