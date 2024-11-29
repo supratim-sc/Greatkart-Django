@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 
@@ -170,3 +170,62 @@ def activate(request, uidb64, token):
 @login_required(login_url='login')
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')
+
+
+
+def forgotPassword(request):
+    # checking if the request method is POST
+    if request.method == 'POST':
+        # getting the user provided email
+        email = request.POST['email']
+        
+        # Checking if the user with the email provided exists or not
+        if Account.objects.filter(email__exact=email).exists():
+
+            # getting the user
+            user = Account.objects.get(email__exact=email)
+
+            # getting the current site, which we will use in the email
+            current_site = get_current_site(request)
+
+            # Subject of the email
+            email_subject = f'Reset password for your {current_site} account'
+
+            # Creating email message
+            email_message = render_to_string(       # rendering a template to a string, rather than returning an HTTP response
+                'accounts/forgot_password_email.html',
+                {
+                    'user' : user,
+                    'current_site' : current_site,
+                    'encoded_user_id' : urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token' : default_token_generator.make_token(user),
+                }   # passing values to the template to make encoded link for activation
+            )
+
+            # the user given email address from the registation form
+            to_email = email
+
+            # Creating EmailMessage object with the set data
+            send_email = EmailMessage(email_subject, email_message, to=[to_email])
+
+            # Sending the mail
+            send_email.send()
+
+            # Displaying success message
+            messages.success(request, 'Password reset link has been sent to your email ' + email)
+
+            # Taking the user to login page
+            return redirect('login')
+
+        # if user with the provided email does not exists then
+        else:
+            # showing an error message
+            messages.error(request, 'Account does not exists!!')
+
+            # redirecting the user to reset password page
+            return redirect('forgotPassword')
+
+    return render(request, 'accounts/forgot_password.html')
+
+def resetPassword_validate(request, uidb64, token):
+    return HttpResponse('OK')
