@@ -227,5 +227,70 @@ def forgotPassword(request):
 
     return render(request, 'accounts/forgot_password.html')
 
+
 def resetPassword_validate(request, uidb64, token):
-    return HttpResponse('OK')
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+
+    except(ValueError, TypeError, OverflowError, Account.DoesNotExist):
+        user = None
+    
+    # if user is not None and the token is valid
+    if user and default_token_generator.check_token(user, token):
+        # setting uid in the session
+        request.session['uid'] = uid
+
+        # displaying success message
+        messages.success(request, 'Please reset your password')
+
+        # redirecting the user to reset pqassword page
+        return redirect('resetPassword')
+    
+    # if the user is None or token is not valid or token expired
+    else:
+        # showing error message
+        messages.error(request, 'Invalid password change link')
+
+        # redirecting the user to login page
+        return redirect('login')
+
+
+def resetPassword(request):
+    # if post the password reset form
+    if request.method == 'POST':
+        # storing the password and confirm_password values
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+
+        # if passwords fo not match
+        if password != confirm_password:
+            # showing error message
+            messages.error(request, 'Passwords do not mathch!!')
+
+            # redirecting the user to the reset_password page
+            return redirect('resetPassword')
+        
+        # if password matches then retrieve the uid from the session of request object
+        uid = request.session.get('uid')
+        
+        # retrieving the user object
+        user = Account.objects.get(pk=uid)
+
+        # setting the new password for the user
+        user.set_password(password)
+        
+        # saving the user with the new changed password
+        user.save()
+
+        # deleting the uid from the session after changing the user password
+        del request.session['uid']
+
+        # printing success message
+        messages.success(request, 'Password changed successfully')
+
+        # redirecting the user to login page
+        return redirect('login')
+
+
+    return render(request, 'accounts/reset_password.html')
