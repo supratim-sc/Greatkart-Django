@@ -106,7 +106,7 @@ def login(request):
             messages.success(request, 'Logged in successfully!!')
 
             # redirecting the user to the home page
-            return redirect('login')
+            return redirect('dashboard')
         
         # if user not founf with the provided credentials
         else:
@@ -164,3 +164,9 @@ def activate(request, uidb64, token):
 
         # redirecting the user to registration page
         return redirect('register')
+    
+
+
+@login_required(login_url='login')
+def dashboard(request):
+    return render(request, 'accounts/dashboard.html')
