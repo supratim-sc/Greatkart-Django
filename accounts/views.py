@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 # EMAIL MESSAGE imports
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
@@ -56,7 +56,7 @@ def register(request):
                 {
                     'user' : user,
                     'current_site' : current_site,
-                    'encoded_user_id' : urlsafe_base64_encode(force_bytes(user.id)),
+                    'encoded_user_id' : urlsafe_base64_encode(force_bytes(user.pk)),
                     'token' : default_token_generator.make_token(user),
                 }   # passing values to the template to make encoded link for activation
             )
@@ -70,11 +70,14 @@ def register(request):
             # Sending the mail
             send_email.send()
 
-            # showing success message
-            messages.success(request, 'Registration Successful!!')
+            # # showing success message
+            # messages.success(request, 'Registration Successful!!')
 
-            # redirecting the user to registration page
-            return redirect('register')
+            # # redirecting the user to registration page
+            # return redirect('register')
+
+            # instead of showing success message on the registration page we are taking user to a custom page and show message there
+            return redirect('/accounts/login/?command=verification&email='+email)
 
     else:
         form = RegistrationForm()
@@ -133,4 +136,31 @@ def logout(request):
 
 
 def activate(request, uidb64, token):
-    return
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+
+    except(ValueError, TypeError, OverflowError, Account.DoesNotExist):
+        user = None
+    
+    # if user is not None and the token is valid
+    if user and default_token_generator.check_token(user, token):
+        # setting the user to active user
+        user.is_active = True
+
+        # saving the user
+        user.save()
+
+        # displaying success message
+        messages.success(request, 'Congratulations! Your account is activated. You can login.')
+
+        # redirecting the user to login page
+        return redirect('login')
+    
+    # if the user is None or token is not valid or token expired
+    else:
+        # showing error message
+        messages.error(request, 'Invalid activation link')
+
+        # redirecting the user to registration page
+        return redirect('register')
