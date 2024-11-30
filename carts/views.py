@@ -20,9 +20,15 @@ def cart(request):
     total = 0
     cart_items = None
     try:
-        # getting the cart items
-        cart = Cart.objects.get(cart_id = _get_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart)
+        # if authenticated user i.e., user logs in then fetch cart items depending on the user
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(user=request.user)
+
+        # if user not logs in then fetch cart items depending on the session id from request
+        else:
+            # getting the cart and cart items from session id
+            cart = Cart.objects.get(cart_id = _get_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart)
         # iterating over cart items
         for cartitem in cart_items:
             total += cartitem.product.price * cartitem.quantity
