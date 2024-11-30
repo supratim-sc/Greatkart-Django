@@ -5,85 +5,141 @@
 
 <!-- component goes here -->
 {% block content %}
-<section class="section-content padding-y bg">
-  <div class="container">
-    <!-- ============================ COMPONENT 1 ================================= -->
-    <div class="row">
-      <aside class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title mb-4">Billing Address</h4>
-            <form action="" method="POST">
-                {% csrf_token %}
-                <div class="form-row">
-                    <div class="col form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" name="first_name" id="first_name" class="form-control" required>
-                    </div>
-                    <div class="col form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="last_name" id="last_name" class="form-control" required>
-                    </div>
+<form action="" method="POST">
+  {% csrf_token %}
+  <section class="section-content padding-y bg">
+    <div class="container">
+      <!-- ============================ COMPONENT 1 ================================= -->
+      <div class="row">
+        <aside class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title mb-4">Billing Address</h4>
+              <div class="form-row">
+                <div class="col form-group">
+                  <label for="first_name">First Name</label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                <!-- form-row end -->
-                
-                <div class="form-row">
-                    <div class="col form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="col form-group">
-                        <label for="phone_number">Phone Number</label>
-                        <input type="text" name="phone_number" id="phone_number" class="form-control" required>
-                    </div>
+                <div class="col form-group">
+                  <label for="last_name">Last Name</label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                <!-- form-row end -->
+              </div>
+              <!-- form-row end -->
 
-                <div class="form-row">
-                    <div class="col form-group">
-                        <label for="address_line_1">Address Line 1</label>
-                        <input type="address_line_1" name="address_line_1" id="address_line_1" class="form-control" required>
-                    </div>
-                    <div class="col form-group">
-                        <label for="address_line_2">Address Line 2</label>
-                        <input type="text" name="address_line_2" id="address_line_2" class="form-control">
-                    </div>
+              <div class="form-row">
+                <div class="col form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                <!-- form-row end -->
+                <div class="col form-group">
+                  <label for="phone_number">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phone_number"
+                    id="phone_number"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <!-- form-row end -->
 
-                <div class="form-row">
-                    <div class="col form-group">
-                        <label for="city">City</label>
-                        <input type="city" name="city" id="city" class="form-control" required>
-                    </div>
-                    <div class="col form-group">
-                        <label for="state">State</label>
-                        <input type="text" name="state" id="state" class="form-control" required>
-                    </div>
-                    <div class="col form-group">
-                        <label for="country">Country</label>
-                        <input type="text" name="country" id="country" class="form-control" required>
-                    </div>
+              <div class="form-row">
+                <div class="col form-group">
+                  <label for="address_line_1">Address Line 1</label>
+                  <input
+                    type="address_line_1"
+                    name="address_line_1"
+                    id="address_line_1"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                <!-- form-row end -->
+                <div class="col form-group">
+                  <label for="address_line_2">Address Line 2</label>
+                  <input
+                    type="text"
+                    name="address_line_2"
+                    id="address_line_2"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <!-- form-row end -->
 
-                <div class="form-row">
-                    <div class="col form-group">
-                        <label for="order_note">Order Note</label>
-                        <textarea class="form-control" name="order_note" id="order_note"></textarea>
-                    </div>
+              <div class="form-row">
+                <div class="col form-group">
+                  <label for="city">City</label>
+                  <input
+                    type="city"
+                    name="city"
+                    id="city"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                <!-- form-row end -->
-            </form>
+                <div class="col form-group">
+                  <label for="state">State</label>
+                  <input
+                    type="text"
+                    name="state"
+                    id="state"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="col form-group">
+                  <label for="country">Country</label>
+                  <input
+                    type="text"
+                    name="country"
+                    id="country"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <!-- form-row end -->
+
+              <div class="form-row">
+                <div class="col form-group">
+                  <label for="order_note">Order Note</label>
+                  <textarea
+                    class="form-control"
+                    name="order_note"
+                    id="order_note"
+                  ></textarea>
+                </div>
+              </div>
+              <!-- form-row end -->
+            </div>
           </div>
-        </div>
-        <!-- card.// -->
-      </aside>
-      <!-- col.// -->
-      <aside class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <table class="table table-borderless table-shopping-cart">
+          <!-- card.// -->
+        </aside>
+        <!-- col.// -->
+        <aside class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-borderless table-shopping-cart">
                 <thead class="text-muted">
                   <tr class="small text-uppercase">
                     <th scope="col">Product</th>
@@ -119,8 +175,8 @@
                           -->
                           <p class="text-muted small">
                             {# looping over the product variations and show #}
-                            {% for product_variation in cart_item.product_variations.all %}
-                              {{ product_variation.variation_category }} : {{ product_variation.variation_value }} <br />
+                            {% for product_variation in cart_item.product_variations.all %} 
+                                {{ product_variation.variation_category }} : {{ product_variation.variation_value }} <br />
                             {% endfor %}
                           </p>
                         </figcaption>
@@ -154,30 +210,31 @@
                   {% endfor %}
                 </tbody>
               </table>
-            <hr />
-            <p class="text-center mb-3">
-              <img
-                src="{% static './images/misc/payments.png' %}"
-                height="26"
-              />
-            </p>
-            <a href="./place-order.html" class="btn btn-primary btn-block">
-              Place Order
-            </a>
-            <a href="{% url 'store' %}" class="btn btn-light btn-block"
-              >Continue Shopping</a
-            >
+              <hr />
+              <p class="text-center mb-3">
+                <img
+                  src="{% static './images/misc/payments.png' %}"
+                  height="26"
+                />
+              </p>
+              <button type="submit" class="btn btn-primary btn-block">
+                Place Order
+              </button>
+              <a href="{% url 'store' %}" class="btn btn-light btn-block"
+                >Continue Shopping</a
+              >
+            </div>
+            <!-- card-body.// -->
           </div>
-          <!-- card-body.// -->
-        </div>
-        <!-- card.// -->
-      </aside>
-      <!-- col.// -->
-    </div>
-    <!-- row.// -->
+          <!-- card.// -->
+        </aside>
+        <!-- col.// -->
+      </div>
+      <!-- row.// -->
 
-    <!-- ============================ COMPONENT 1 END .// ================================= -->
-  </div>
-  <!-- container .//  -->
-</section>
+      <!-- ============================ COMPONENT 1 END .// ================================= -->
+    </div>
+    <!-- container .//  -->
+  </section>
+</form>
 {% endblock %}
