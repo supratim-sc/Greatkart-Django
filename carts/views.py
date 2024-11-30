@@ -225,9 +225,16 @@ def decrement_item_count(request, product_id, cart_item_id):
     return redirect('cart')
 
 def remove_cart_item(request, product_id, cart_item_id):
-    cart = Cart.objects.get(cart_id=_get_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
-    cart_item = CartItem.objects.get(cart=cart, product=product, id=cart_item_id)
+
+    # if logged in user then getting the cart item using the user
+    if request.user.is_authenticated:
+        cart_item = CartItem.objects.get(user=request.user, product=product, id=cart_item_id)
+
+    # if no loggd in then getting the cart item using the cart from session
+    else:
+        cart = Cart.objects.get(cart_id=_get_cart_id(request))
+        cart_item = CartItem.objects.get(cart=cart, product=product, id=cart_item_id)
 
     # deleting the item
     cart_item.delete()
