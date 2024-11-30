@@ -110,15 +110,63 @@ def login(request):
                 # getting the cart items using the cart
                 cart_items = CartItem.objects.filter(cart=cart)
 
-                # if we have acrt items then
+                # if we have cart items then
                 if cart_items.exists():
-                    # looping over the cart items
+                    # for storing product variations for current product
+                    product_variations = []
+
                     for item in cart_items:
-                        # assigning the logged in user to the cart item
-                        item.user = user
-                        
-                        # saving the cart item
-                        item.save()
+                        # getting the variations of cart item
+                        variation = item.product_variations.all()
+                        # appending the variation to the list
+                        product_variations.append(list(variation))
+
+                    # getting cart items for the user
+                    cart_items = CartItem.objects.filter(user=user)
+
+                    # for storing the existing variations for product
+                    existing_variation_list = []
+                    # for storing the cart id
+                    cart_item_id = []
+
+                    # looping over the cart items for the user
+                    for item in cart_items:
+                        # getting the variations of item
+                        existing_variation = item.product_variations.all()
+                        # adding the existing variation to the exisitng_variation_list
+                        existing_variation_list.append(list(existing_variation))
+                        # storing the id of item
+                        cart_item_id.append(item.id)
+
+                    print(product_variations, existing_variation_list, cart_item_id)
+
+                    # looping over the current variation list to check if it is in existing_variation_list
+                    for variation in product_variations:
+                        # if the variation is in the existing variation
+                        if variation in existing_variation_list:
+                            # getting the index of the variation
+                            index = existing_variation_list.index(variation)
+                            # getting the id at that index
+                            item_id = cart_item_id[index]
+                            # getting the cart item using the id
+                            cart_item = CartItem.objects.get(id=item_id)
+                            # increasing the quantity of that variation
+                            cart_item.quantity += 1
+                            # assigning the user to the cart_item
+                            cart_item.user = user
+                            # saving the cart item
+                            cart_item.save()
+
+                        # if the variation is not in the exiting variation then
+                        else:
+                            # getting the items using cart id from session
+                            cart_items = CartItem.objects.filter(cart=cart)
+                            # looping over the cart items
+                            for item in cart_items:
+                                # assigning the logged in user to the cart item
+                                item.user = user
+                                # saving the cart item
+                                item.save()
             except:
                 pass
 
