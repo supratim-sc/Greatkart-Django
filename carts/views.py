@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Cart, CartItem
 from store.models import Product, ProductVariation
 
@@ -195,6 +196,7 @@ def remove_cart_item(request, product_id, cart_item_id):
     return redirect('cart')
 
 
+@login_required(login_url='login')
 def checkout(request):
     # code copied from cart view
     total = 0
