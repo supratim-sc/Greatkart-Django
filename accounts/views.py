@@ -13,6 +13,9 @@ from django.core.mail import EmailMessage
 from .forms import RegistrationForm
 from .models import Account
 
+from carts.models import Cart, CartItem
+from carts.views import _get_cart_id
+
 # Create your views here.
 def register(request):
     # Checking if POST request comes in
@@ -99,6 +102,26 @@ def login(request):
 
         # checking if user is found with the provided credentials or not
         if user:
+            # Assigning the cart items to the logged in user
+            try:
+                # getting the cart using the cart_id
+                cart = Cart.objects.get(cart_id=_get_cart_id(request))
+
+                # getting the cart items using the cart
+                cart_items = CartItem.objects.filter(cart=cart)
+
+                # if we have acrt items then
+                if cart_items.exists():
+                    # looping over the cart items
+                    for item in cart_items:
+                        # assigning the logged in user to the cart item
+                        item.user = user
+                        
+                        # saving the cart item
+                        item.save()
+            except:
+                pass
+
             # if user found, then logging in the user
             auth.login(request, user)
 
@@ -107,6 +130,7 @@ def login(request):
 
             # redirecting the user to the home page
             return redirect('dashboard')
+            
         
         # if user not founf with the provided credentials
         else:
