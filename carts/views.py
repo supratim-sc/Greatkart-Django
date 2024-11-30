@@ -53,6 +53,9 @@ def cart(request):
 # creating a private function to get the cart_id. Here _ means private function
 
 def add_to_cart(request, product_id):   # passing product_id from product_details.html page
+    # getting the current logged in user
+    current_user = request.user
+
     # fetching the product
     product = Product.objects.get(id=product_id)
 
@@ -72,22 +75,29 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
             except:
                 pass
         
+    # if user not logged in then getting the cart_id from the session else create cart
+    if not current_user.is_authenticated:
+        # getting the cart, if not then create cart
+        try:
+            # getting the cart object
+            cart = Cart.objects.get(cart_id=_get_cart_id(request))
 
-    # getting the cart, if not then create cart
-    try:
-        # getting the cart object
-        cart = Cart.objects.get(cart_id=_get_cart_id(request))
+        # if cart is not present
+        except Cart.DoesNotExist:
+            # creating a new cart object
+            cart = Cart.objects.create(
+                cart_id = _get_cart_id(request)
+            )
+            cart.save()
 
-    # if cart is not present
-    except Cart.DoesNotExist:
-        # creating a new cart object
-        cart = Cart.objects.create(
-            cart_id = _get_cart_id(request)
-        )
-        cart.save()
+    # if logged in user then getting the cart_items using the user
+    if current_user.is_authenticated:
+        cart_items = CartItem.objects.filter(product=product, user=current_user)
 
-    # Getting all cart items from cart depending on product
-    cart_items = CartItem.objects.filter(product=product, cart=cart)
+    # if not logged in user then getting the cart_items using the cart id
+    else:
+        # Getting all cart items from cart depending on product
+        cart_items = CartItem.objects.filter(product=product, cart=cart)
 
     # Checking for existance of the cart item
     is_cart_item_exists = cart_items.exists()
@@ -130,8 +140,15 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
 
         # if the current product variation is not in the existing product variation list
         else:
-            # creating a new cart item
-            cart_item = CartItem.objects.create(product=product, quantity=1, cart=cart)
+            # if user is logged in then creating the cart item using the user
+            if current_user.is_authenticated:
+                # creating a new cart item
+                cart_item = CartItem.objects.create(product=product, quantity=1, user=current_user)
+
+            # if user is not logged in then creating the cart item using the cart id
+            else:
+                # creating a new cart item
+                cart_item = CartItem.objects.create(product=product, quantity=1, cart=cart)
 
             # if we have an variation of product
             if product_variation:
@@ -146,12 +163,22 @@ def add_to_cart(request, product_id):   # passing product_id from product_detail
 
     # if cart item does not exists in the cart
     else:
-        # creating cartitem object with quantity 1
-        cart_item = CartItem.objects.create(
-            product=product,
-            cart=cart,
-            quantity=1,
-        )
+        # if user logged in then create using the user
+        if current_user.is_authenticated:
+            # creating cartitem object with quantity 1
+            cart_item = CartItem.objects.create(
+                product=product,
+                user=current_user,
+                quantity=1,
+            )
+        # if user is not logged in then create using the cart id
+        else:
+            # creating cartitem object with quantity 1
+            cart_item = CartItem.objects.create(
+                product=product,
+                cart=cart,
+                quantity=1,
+            )
 
         # if we have an variation of product
         if product_variation:
