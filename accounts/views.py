@@ -10,6 +10,8 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
+import requests
+
 from .forms import RegistrationForm
 from .models import Account
 
@@ -138,8 +140,6 @@ def login(request):
                         # storing the id of item
                         cart_item_id.append(item.id)
 
-                    print(product_variations, existing_variation_list, cart_item_id)
-
                     # looping over the current variation list to check if it is in existing_variation_list
                     for variation in product_variations:
                         # if the variation is in the existing variation
@@ -175,6 +175,27 @@ def login(request):
 
             # showing login successful message
             messages.success(request, 'Logged in successfully!!')
+
+            # this will grab the URL from where we are coming
+            url = request.META.get('HTTP_REFERER')  # http://127.0.0.1:8000/accounts/login/?next=/cart/checkout/
+
+            try:
+                # The line query = requests.utils.urlparse(url).query is used to extract the query string from a URL. 
+                # taking the part after the ? from the URL we are coming from
+                query = requests.utils.urlparse(url).query  # next=/cart/checkout/
+
+                # query.split('&'): splits the query into parts based on the & character. In this case, since there is only one key-value pair (next=/cart/checkout/), the split results in a list: ['next=/cart/checkout/'].
+                # x.split('='): Each item in the list is then split by the = character to separate the key and the value. The result would be a list like ['next', '/cart/checkout/'].
+                # dict(...): The dict() function then converts the list of key-value pairs into a dictionary, where 'next' is the key and '/cart/checkout/' is the value
+                # For example, for a more complex query string like "next=/cart/checkout/&user=JohnDoe", the result would be: {'next': '/cart/checkout/', 'user': 'JohnDoe'}
+                params = dict(x.split('=') for x in query.split('&'))   # {'next': '/cart/checkout/'}
+
+                if 'next' in params:
+                    # if we have next in URL then redirecting the user to the next query page
+                    return redirect(params['next'])
+                
+            except:
+                pass
 
             # redirecting the user to the home page
             return redirect('dashboard')
