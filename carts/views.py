@@ -248,9 +248,17 @@ def checkout(request):
     total = 0
     cart_items = None
     try:
-        # getting the cart items
-        cart = Cart.objects.get(cart_id = _get_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart)
+        # if user is logged in
+        if request.user.is_authenticated:
+            # getting the cart using the user
+            cart_items = CartItem.objects.filter(user=request.user)
+
+        # if user is not logged in
+        else:
+            # getting the cart items using cart id from session
+            cart = Cart.objects.get(cart_id = _get_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart)
+            
         # iterating over cart items
         for cartitem in cart_items:
             total += cartitem.product.price * cartitem.quantity
