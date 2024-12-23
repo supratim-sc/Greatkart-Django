@@ -1,11 +1,17 @@
 import datetime
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .models import Order
 from .forms import OrderForm
 from carts.models import CartItem
 
 # Create your views here.
+@login_required(login_url='login')
+def payments(requests):
+    return render(requests, 'orders/payments.html')
+
+@login_required(login_url='login')
 def place_order(request):
     current_user = request.user
 
@@ -18,14 +24,13 @@ def place_order(request):
     
 
     # calculating grand_total and tax
-    grand_total = tax = total = quantity = 0
+    grand_total = tax = total = 0
 
     for cart_item in cart_items:
         total += (cart_item.product.price * cart_item.quantity)
-        quantity += cart_item.quantity
 
     tax = total * 0.02
-    grand_total = total * tax
+    grand_total = total + tax
 
 
     # if the user has cart items in their cart then proceed further
@@ -68,12 +73,22 @@ def place_order(request):
             order_number = current_date + str(data.id) # concatenating date and order id
 
             data.order_number = order_number
-            
+
             # saving the data with the order number
             data.save()
 
+            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+
+            context = {
+                'order' : order,
+                'cart_items': cart_items,
+                'total': total,
+                'tax': tax,
+                'grand_total': grand_total,
+            }
+
             # redirecting the user
-            return redirect('checkout')
+            return render(request, 'orders/payments.html', context)
     else:
         return redirect('checkout')
 

@@ -45,8 +45,14 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+    
+    def full_address(self):
+        return f'{self.address_line_1} {self.address_line_2}'
+
     def __str__(self):
-        return self.user.first_name
+        return self.full_name()
 
 
 class OrderProduct(models.Model):
