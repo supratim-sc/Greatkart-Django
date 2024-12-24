@@ -160,3 +160,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
 EMAIL_USE_TLS = True  # Use TLS (Transport Layer Security)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
