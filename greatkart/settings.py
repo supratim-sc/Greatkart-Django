@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'csp',
     'category',
     'accounts',
     'store',
@@ -161,3 +162,11 @@ EMAIL_USE_TLS = True  # Use TLS (Transport Layer Security)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
+
+# CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://*.paypal.com", "https://*.paypalobjects.com", "https://apis.google.com", "'unsafe-inline'", "blob:")
+
+# CSP_STYLE_SRC = ("'self'", "https://*.paypal.com", "'unsafe-inline'")
+# CSP_IMG_SRC = ("'self'", "data:", "https://*.paypal.com")
+
+

@@ -103,9 +103,9 @@
                   </td>
                   <td>
                     <div class="price-wrap">
-                      <var class="price">₹ {{ cart_item.sub_total }}</var>
+                      <var class="price">$ {{ cart_item.sub_total }}</var>
                       <small class="text-muted"
-                        >₹ {{cart_item.product.price }} each
+                        >$ {{cart_item.product.price }} each
                       </small>
                     </div>
                     <!-- price-wrap .// -->
@@ -149,6 +149,7 @@
               <!-- PayPal button will show here -->
             </div>
 
+
           </div>
           <!-- card-body.// -->
         </div>
@@ -166,30 +167,77 @@
 <!-- PayPal Button Script -->
 <script>
 
-    paypal.Buttons({
-      style: {
-        color: 'blue',
-        shape: 'pill',
-        label: 'pay',
-        height: 40
-      },
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            amount: {
-              value: '100',
-            }
-          }]
-        });
-      },
-      // Finalize the transaction
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          // Show a success message to the buyer
-          console.log(details);
-        });
+  // Creating CSRFToken using jQuery
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
       }
-    }).render('#paypal-button-container');
+      return cookieValue;
+  }
+
+  var amount = "{{ grand_total }}";         // Getting grand_total value
+  var url = "{% url 'payments' %}";         // Getting the url for the payments set in urls.py file
+  var csrftoken = getCookie('csrftoken');   // Getting CSRFToken
+  var orderID = "{{ order.order_number }}"; // Getting order id ( order_number )
+  var payment_method = "PayPal";            // Payment method set to static value PayPal as we are not including other payment methods
+  
+  paypal.Buttons({
+    style: {
+      color: 'blue',
+      shape: 'pill',
+      label: 'pay',
+      height: 40
+    },
+
+    // Cerating Order Value for payment
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: amount,
+          }
+        }]
+      });
+    },
+
+    // Finalize the transaction
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        // Show a success message to the buyer
+        console.log(details);
+
+        sendData();
+
+        // Sending data to the URL with request_method, haders and body of the response
+        function sendData(){
+          fetch(url, {
+            method : "POST",
+
+            headers : {
+              "Content-type" : "application/json",
+              "X-CSRFToken": csrftoken,
+            },
+
+            body: JSON.stringify({    // Converting data to JSON format
+              order_id : orderID,
+              transaction_id : details.id,
+              payment_method : payment_method,
+              status : details.status,
+            }),
+          })
+        }
+      });
+    }
+  }).render('#paypal-button-container');
 </script>
 
 {% endblock %}
