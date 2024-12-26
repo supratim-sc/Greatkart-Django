@@ -4,7 +4,7 @@ import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Order, Payment
+from .models import Order, Payment, OrderProduct
 from .forms import OrderForm
 from carts.models import CartItem
 
@@ -35,6 +35,36 @@ def payments(request):
     order.is_ordered = True
     # Saving the order
     order.save()
+
+    # Moving the cart items to OrderProduct table
+    cart_items = CartItem.objects.filter(user = request.user)
+
+    # iterating over the cart items and storing them to OrderProduct table
+    for item in cart_items:
+        # Creating OrderProduct object
+        orderproduct = OrderProduct()
+
+        # Saving details to the OrderProduct object
+        orderproduct.order_id = order.id
+        orderproduct.payment = payment
+        orderproduct.user_id = request.user.id
+        orderproduct.product_id = item.product_id
+        orderproduct.quantity = item.quantity
+        orderproduct.product_price = item.product.price
+        orderproduct.ordered = True
+
+        # Saving the OrderProduct object so that we can set the variations later
+        orderproduct.save()
+        
+
+
+    # Redue the quantity of the sold product
+
+    # Clear the cart
+
+    # Send order received email to the customer
+
+    # Send order number and transaction id back to the sendData() JS method on payemnts.html via JSON response
 
     return render(request, 'orders/payments.html')
 
