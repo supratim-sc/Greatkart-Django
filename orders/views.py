@@ -55,6 +55,13 @@ def payments(request):
 
         # Saving the OrderProduct object so that we can set the variations later
         orderproduct.save()
+
+        # Getting the variations for the cart item
+        product_variations = item.product_variations.all()
+        # Setting the variations
+        orderproduct.product_variations.set(product_variations)
+        # Saving the product with its variations
+        orderproduct.save()
         
 
 
