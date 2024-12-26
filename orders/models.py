@@ -1,7 +1,7 @@
 from django.db import models
 
 from accounts.models import Account
-from carts.models import Product, ProductVariation
+from store.models import Product, ProductVariation
 
 # Create your models here.
 class Payment(models.Model):
@@ -60,9 +60,7 @@ class OrderProduct(models.Model):
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    product_variation = models.ForeignKey(ProductVariation, on_delete=models.CASCADE)
-    color = models.CharField(max_length=20)
-    size = models.CharField(max_length=20)
+    product_variations = models.ManyToManyField(ProductVariation, blank=True)
     quantity = models.IntegerField()
     product_price = models.FloatField()
     ordered = models.BooleanField(default=False)
