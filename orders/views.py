@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Order, Payment, OrderProduct
 from .forms import OrderForm
 from carts.models import CartItem
+from store.models import Product
 
 # Create your views here.
 @login_required(login_url='login')
@@ -63,9 +64,15 @@ def payments(request):
         # Saving the product with its variations
         orderproduct.save()
         
+        
+        # Redue the quantity of the sold product
+        # Getting the product using the cart item
+        product = Product.objects.get(id=item.product_id)
+        # Reducing the stock quantity
+        product.stock -= item.quantity
+        # Saving the product
+        product.save()
 
-
-    # Redue the quantity of the sold product
 
     # Clear the cart
 
