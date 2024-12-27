@@ -3,6 +3,8 @@ import json
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.mail.message import EmailMessage
+from django.template.loader import render_to_string
 
 from .models import Order, Payment, OrderProduct
 from .forms import OrderForm
@@ -78,6 +80,27 @@ def payments(request):
     CartItem.objects.filter(user=request.user).delete()
 
     # Send order received email to the customer
+    # Subject of the email
+    email_subject = 'Thank you for ordering with us!'
+
+    # Creating email message
+    email_message = render_to_string(       # rendering a template to a string, rather than returning an HTTP response
+        'orders/order_received_email.html',
+        {
+            'user' : request.user,
+            'order': order,
+            'cart_items' : CartItem.objects.filter(user=request.user),
+        }   # passing values to the template to make encoded link for activation
+    )
+
+    # the user given email address from the registation form
+    to_email = request.user.email
+
+    # Creating EmailMessage object with the set data
+    send_email = EmailMessage(email_subject, email_message, to=[to_email])
+
+    # Sending the mail
+    send_email.send()
 
     # Send order number and transaction id back to the sendData() JS method on payemnts.html via JSON response
 

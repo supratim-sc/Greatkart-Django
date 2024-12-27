@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+    Hello {{ user.first_name }},
+
+    Thank you for shopping with us! 
+    We have received your order. 
+    
+    Order number: {{ order.order_number }}
+    Order Total: ${{ order.order_total }}
+    Payment Status: {{ order.payment.status }}
+
+{% endautoescape %}
