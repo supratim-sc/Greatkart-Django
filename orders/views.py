@@ -194,4 +194,29 @@ def place_order(request):
         return redirect('checkout')
 
 def order_complete(request):
-    return render(request, 'orders/order_complete.html')
+    order_number = request.GET['order_number']
+    payment_id = request.GET['payment_id']
+
+    try:
+
+        order = Order.objects.get(order_number = order_number)
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        payment = Payment.objects.get(payment_id=payment_id)
+
+        total = 0
+        for item in ordered_products:
+            total += (item.product_price * item.quantity)
+        
+        context = {
+            'order': order,
+            'order_number': order.order_number,
+            'ordered_products': ordered_products,
+            'payment_id': payment.payment_id,
+            'total': total,
+        }
+
+        return render(request, 'orders/order_complete.html', context)
+    
+    # if the order_number and payment_id from the url is not valid then redirecting the user to the home page
+    except(Payment.DoesNotExist, Order.DoesNotExist):
+        return redirect('home')
