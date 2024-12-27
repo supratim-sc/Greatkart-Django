@@ -75,6 +75,7 @@ def payments(request):
 
 
     # Clear the cart
+    CartItem.objects.filter(user=request.user).delete()
 
     # Send order received email to the customer
 
