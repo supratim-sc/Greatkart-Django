@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.mail.message import EmailMessage
 from django.template.loader import render_to_string
+from django.http.response import JsonResponse
 
 from .models import Order, Payment, OrderProduct
 from .forms import OrderForm
@@ -103,8 +104,13 @@ def payments(request):
     send_email.send()
 
     # Send order number and transaction id back to the sendData() JS method on payemnts.html via JSON response
+    data = {
+        'order_number': order.order_number,
+        'payment_id': payment.payment_id,
+    }
 
-    return render(request, 'orders/payments.html')
+    # Returning JsonResponse to the JavaScript fecth() method at payments.html page
+    return JsonResponse(data)
 
 @login_required(login_url='login')
 def place_order(request):
@@ -187,3 +193,5 @@ def place_order(request):
     else:
         return redirect('checkout')
 
+def order_complete(request):
+    return render(request, 'orders/order_complete.html')
