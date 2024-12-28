@@ -109,6 +109,73 @@
     <div class="row">
       <div class="col-md-9">
         <header class="section-heading">
+          <h5>Give your valuable review about this product</h5>
+        </header>
+        <article class="box mb-3">
+          <form action="" method="POST">
+            {% csrf_token %}
+
+            <!-- Review Stars -->
+            <div class="mb-3 row">
+              <label for="subject" class="col-sm-2 col-form-label">Rate this product</label>
+              <div class="col-sm-10">
+                <div class="form-check rate">
+
+                  <input type="radio" name="reating" value="5" id="review_10" required>
+                  <label for="review_10"></label>
+                  
+                  <input type="radio" name="rating" value="4.5" id="review_9" required>
+                  <label class="half" for="review_9"></label>
+
+                  <input type="radio" name="rating" value="4" id="review_8" required>
+                  <label for="review_8"></label>
+                  
+                  <input type="radio" name="rating" value="3.5" id="review_7" required>
+                  <label class="half" for="review_7"></label>
+
+                  <input type="radio" name="rating" value="3" id="review_6" required>
+                  <label for="review_6"></label>
+                  
+                  <input type="radio" name="rating" value="2.5" id="review_5" required>
+                  <label class="half" for="review_5"></label>
+
+                  <input type="radio" name="rating" value="2" id="review_4" required>
+                  <label for="review_4"></label>
+                  
+                  <input type="radio" name="rating" value="1.5" id="review_3" required>
+                  <label class="half" for="review_3"></label>
+
+                  <input type="radio" name="rating" value="1" id="review_2" required>
+                  <label for="review_2"></label>
+                  
+                  <input type="radio" name="rating" value="0.5" id="review_1" required>
+                  <label class="half" for="review1"></label>
+                  
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Subject -->
+            <div class="mb-3 row">
+              <label for="subject" class="col-sm-2 col-form-label">Review Title</label>
+              <div class="col-sm-10">
+                <input type="text" name="subject" id="subject" class="form-control" >
+              </div>
+            </div>
+
+            <!-- Review Body -->
+            <div class="mb-3 row">
+              <label for="review" class="col-sm-2 col-form-label">Review Body</label>
+              <div class="col-sm-10">
+                <textarea name="review" id="review" class="form-control"></textarea>
+              </div>
+            </div>
+          </form>
+        </article>
+      </div>
+
+      <div class="col-md-9">
+        <header class="section-heading">
           <h3>Customer Reviews</h3>
         </header>
 
