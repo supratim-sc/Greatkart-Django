@@ -66,5 +66,13 @@ class ReviewRatings(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "ReviewRating"
+        verbose_name_plural = "ReviewRatings"
+
     def __str__(self):
         return self.subject
+    
+    def review_first_10_words(self):
+        # Split the content into words and join the first 10
+        return ' '.join(self.review.split()[:10]) + '...'

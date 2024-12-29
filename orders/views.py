@@ -193,6 +193,7 @@ def place_order(request):
     else:
         return redirect('checkout')
 
+@login_required(login_url='login')
 def order_complete(request):
     order_number = request.GET['order_number']
     payment_id = request.GET['payment_id']

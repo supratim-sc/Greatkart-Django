@@ -19,4 +19,12 @@ class CustomProductVariationModel(admin.ModelAdmin):
 
 admin.site.register(ProductVariation, CustomProductVariationModel)
 
-admin.site.register(ReviewRatings)
+class CustomReviewRatingsAdmin(admin.ModelAdmin):
+    list_display = ['product', 'user', 'subject', 'review_first_10_words', 'ratings']
+    search_fields = ['product', 'user', 'ratings']
+    list_filter = ['product', 'ratings']
+    list_per_page = 20
+
+    
+
+admin.site.register(ReviewRatings, CustomReviewRatingsAdmin)

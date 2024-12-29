@@ -1,7 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
-from .models import Product
+from django.contrib import messages
+
+from .models import Product, ReviewRatings
+from .forms import ReviewRatingsForm
+
 from category.models import Category
 from carts.models import Cart, CartItem
 from carts.views import _get_cart_id
@@ -65,3 +69,64 @@ def search(request):
         'products_count' : products_count,
     }
     return render(request, 'store/store.html', context)
+
+
+def submit_review(request, product_id):
+    # Getting the URL of the current page
+    url = request.META.get('HTTP_REFERER')
+
+    # Checking for the POST request
+    if request.method == 'POST':
+        try:
+            # Checking if a rating for the user already exists, then modify/update it
+            review = ReviewRatings.objects.get(user_id=request.user.id, product_id=product_id)
+
+            # As we want to update the review, hence passing the instance of the early review
+            form = ReviewRatingsForm(request.POST, instance=review)
+
+            # Saving the updated review
+            if form.is_valid():
+                form.save()
+
+                # Displaying the success message
+                messages.success(request, 'Thank you! Your review has been updated.')
+
+                # Redirecting the user to the current page
+                return redirect(url)
+            else:
+                # If the form is not valid, render the form again with errors
+                messages.error(request, 'There was an error with your review. Please try again.')
+                return redirect(url)
+
+        except ReviewRatings.DoesNotExist:
+            # Form for creating a new review if the user hasn't already reviewed this product
+            form = ReviewRatingsForm(request.POST)
+
+            print(form.is_valid())
+
+            if form.is_valid():
+                # Creating an instance of ReviewRatings model
+                data = ReviewRatings()
+
+                data.subject = form.cleaned_data['subject']
+                data.review = form.cleaned_data['review']
+                data.ratings = form.cleaned_data['ratings']
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.product_id = product_id
+                data.user_id = request.user.id
+
+                # Saving the review
+                data.save()
+
+                # Displaying the success message
+                messages.success(request, 'Thank You! Your review has been submitted.')
+
+                # Redirecting the user to the current page
+                return redirect(url)
+            else:
+                # If the form is not valid, render the form again with errors
+                messages.error(request, 'There was an error with your review. Please try again.')
+                return redirect(url)
+
+    # Handle the case where the request is not POST
+    return redirect(url)

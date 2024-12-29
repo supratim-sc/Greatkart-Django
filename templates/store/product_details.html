@@ -109,10 +109,11 @@
     <div class="row">
       <div class="col-md-9">
         <header class="section-heading">
-          <h5>Give your valuable review about this product</h5>
+          <h5>Give your valuable review about {{ product.name }} </h5>
         </header>
         <article class="box mb-3">
-          <form action="" method="POST">
+          {% include 'includes/alerts.html' %}
+          <form action="{% url 'submit_review' product.id %}" method="POST">
             {% csrf_token %}
 
             <!-- Review Stars -->
@@ -121,35 +122,35 @@
               <div class="col-sm-10">
                 <div class="form-check rate">
 
-                  <input type="radio" name="reating" value="5" id="review_10" required>
-                  <label for="review_10"></label>
+                  <input type="radio" name="ratings" value="5" id="review_10" required>
+                  <label for="review_10" title="5"></label>
                   
-                  <input type="radio" name="rating" value="4.5" id="review_9" required>
-                  <label class="half" for="review_9"></label>
+                  <input type="radio" name="ratings" value="4.5" id="review_9" required>
+                  <label class="half" for="review_9" title="4.5"></label>
 
-                  <input type="radio" name="rating" value="4" id="review_8" required>
-                  <label for="review_8"></label>
+                  <input type="radio" name="ratings" value="4" id="review_8" required>
+                  <label for="review_8" title="4"></label>
                   
-                  <input type="radio" name="rating" value="3.5" id="review_7" required>
-                  <label class="half" for="review_7"></label>
+                  <input type="radio" name="ratings" value="3.5" id="review_7" required>
+                  <label class="half" for="review_7" title="3.5"></label>
 
-                  <input type="radio" name="rating" value="3" id="review_6" required>
-                  <label for="review_6"></label>
+                  <input type="radio" name="ratings" value="3" id="review_6" required>
+                  <label for="review_6" title="3"></label>
                   
-                  <input type="radio" name="rating" value="2.5" id="review_5" required>
-                  <label class="half" for="review_5"></label>
+                  <input type="radio" name="ratings" value="2.5" id="review_5" required>
+                  <label class="half" for="review_5" title="2.5"></label>
 
-                  <input type="radio" name="rating" value="2" id="review_4" required>
-                  <label for="review_4"></label>
+                  <input type="radio" name="ratings" value="2" id="review_4" required>
+                  <label for="review_4" title="2"></label>
                   
-                  <input type="radio" name="rating" value="1.5" id="review_3" required>
-                  <label class="half" for="review_3"></label>
+                  <input type="radio" name="ratings" value="1.5" id="review_3" required>
+                  <label class="half" for="review_3" title="1.5"></label>
 
-                  <input type="radio" name="rating" value="1" id="review_2" required>
-                  <label for="review_2"></label>
+                  <input type="radio" name="ratings" value="1" id="review_2" required>
+                  <label for="review_2" title="1"></label>
                   
-                  <input type="radio" name="rating" value="0.5" id="review_1" required>
-                  <label class="half" for="review1"></label>
+                  <input type="radio" name="ratings" value="0.5" id="review_1" required>
+                  <label class="half" for="review_1" title="0.5"></label>
                   
                 </div>
               </div>
@@ -170,6 +171,13 @@
                 <textarea name="review" id="review" class="form-control"></textarea>
               </div>
             </div>
+            
+            {% if user.is_authenticated %}
+              <input type="submit" value="Submit Review" class="btn btn-primary">
+            {% else %}
+              <p>You must log in before posting your review. <span><a href="{% url 'login' %}">Login Now</a></span></p>
+            {% endif %}
+
           </form>
         </article>
       </div>
