@@ -9,6 +9,7 @@ from .forms import ReviewRatingsForm
 from category.models import Category
 from carts.models import Cart, CartItem
 from carts.views import _get_cart_id
+from orders.models import OrderProduct
 
 # Create your views here.
 def store(request, category_slug=None):
@@ -48,9 +49,19 @@ def product_details(request, category_slug, product_slug):
     except Exception as e:
         raise e
     
+
+    # Checking if the current user purchased the product or not
+    try:
+        is_product_ordered = OrderProduct.objects.filter(user_id=request.user.id, product_id=product.id).exists()
+
+    # if product is not ordered by the current user then set to None
+    except OrderProduct.DoesNotExist:
+        is_product_ordered = None
+    
     context = {
         'product' : product,
         'is_cart_item' : is_cart_item,
+        'is_product_ordered' : is_product_ordered,  # sending the product ordered by current user status True/None
     }
     return render(request, 'store/product_details.html', context)
 

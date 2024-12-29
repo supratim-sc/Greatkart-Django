@@ -31,15 +31,15 @@
 }
 
 /* CLICK AND HOVER ON STAR */
-input:checked ~ label, 
-label:hover ~ label{
+.rate input:checked ~ label, 
+.rate label:hover ~ label{
     color: #ffb503;
 }
 
 /* HOVER HIGHLIGHT */
-input:checked + label:hover,
-input:checked ~ label:hover,
-input:checked ~ label:hover ~ label,
-label:hover ~ input:checked ~ label{
+.rate input:checked + label:hover,
+.rate input:checked ~ label:hover,
+.rate input:checked ~ label:hover ~ label,
+.rate label:hover ~ input:checked ~ label{
     color: #cc9000;
 }
