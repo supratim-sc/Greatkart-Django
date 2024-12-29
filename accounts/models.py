@@ -70,6 +70,9 @@ class Account(AbstractBaseUser):
     # To create account for user or superuser we are using the 'MyAccountManager' class object
     objects = MyAccountManager()
 
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
     def __str__(self) -> str:
         return self.email
     

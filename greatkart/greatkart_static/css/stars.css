@@ -43,3 +43,9 @@
 .rate label:hover ~ input:checked ~ label{
     color: #cc9000;
 }
+
+
+/* Styling user submitted revies stars */
+.rating-stars i{
+    color: #ffb503;
+}

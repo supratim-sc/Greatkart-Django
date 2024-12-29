@@ -57,11 +57,21 @@ def product_details(request, category_slug, product_slug):
     # if product is not ordered by the current user then set to None
     except OrderProduct.DoesNotExist:
         is_product_ordered = None
+
+    
+    # Fetching all the reviews for particular product
+    try:
+        reviews = ReviewRatings.objects.filter(product_id = product.id, status = True).order_by('-updated_at')
+
+    # if any review for this product does not exists
+    except ReviewRatings.DoesNotExist:
+        reviews = None
     
     context = {
         'product' : product,
         'is_cart_item' : is_cart_item,
         'is_product_ordered' : is_product_ordered,  # sending the product ordered by current user status True/None
+        'reviews': reviews, # sending all the reviews for this product
     }
     return render(request, 'store/product_details.html', context)
 
