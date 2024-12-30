@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
 
-from .models import Account
+from .models import Account, UserProfile
 
 # Register your models here.
 class AccountAdmin(UserAdmin):
@@ -26,3 +27,21 @@ class AccountAdmin(UserAdmin):
     fieldsets = []
 
 admin.site.register(Account, AccountAdmin)
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['show_image', 'user', 'city', 'state', 'country']
+    
+    # Custom function to show user profile image
+    def show_image(self, user_profile):
+        # if user profile has any image
+        if user_profile.profile_picture:
+            return format_html(f'<img src="{user_profile.profile_picture.url}" alt="{user_profile.user.email}" width="50" height="50" style="object-fit:cover; border-radius:50%">')
+        # if user profile does not have any image
+        else:
+            return 'No image'
+        
+
+admin.site.register(UserProfile, UserProfileAdmin)
+        
+    

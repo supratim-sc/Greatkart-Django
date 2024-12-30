@@ -87,3 +87,22 @@ class Account(AbstractBaseUser):
         return True
     
     # for reference go to: https://docs.djangoproject.com/en/5.1/topics/auth/customizing/#:~:text=for%20more%20details.-,Custom%20users%20and%20permissions,-%C2%B6
+
+
+
+class UserProfile(models.Model):
+    # Here using OneToOne field instead of ForeignKey because in ForeignKey we may have same profile for different Account
+    # But in case of OneToOne field we can only have one profile associated with an Account
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    address_line_1 = models.TextField(blank=True)
+    address_line_2 = models.TextField(blank=True)
+    profile_picture = models.ImageField(blank=True, upload_to='user_profile_pictures')
+    city = models.CharField(max_length=50, blank=True)
+    state = models.CharField(max_length=50, blank=True)
+    country = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return self.user.first_name
+    
+    def full_address(self):
+        return f'{self.address_line_1} {self.address_line_2}'
