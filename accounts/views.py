@@ -18,6 +18,8 @@ from .models import Account
 from carts.models import Cart, CartItem
 from carts.views import _get_cart_id
 
+from orders.models import Order
+
 # Create your views here.
 def register(request):
     # Checking if POST request comes in
@@ -262,7 +264,15 @@ def activate(request, uidb64, token):
 
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    # Fetching orders for the logged in user
+    orders = Order.objects.filter(user_id=request.user.id, is_ordered=True)
+    orders_count = orders.count()
+
+    context = {
+        'orders_count' : orders_count,
+    }
+
+    return render(request, 'accounts/dashboard.html', context)
 
 
 
