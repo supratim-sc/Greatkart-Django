@@ -1,7 +1,18 @@
 <!--   SIDEBAR   -->
 <ul class="list-group">
-    <a class="list-group-item active" href="#"> Dashboard </a>
-    <a class="list-group-item" href="#"> My Orders </a>
-    <a class="list-group-item" href="#"> Edit Profile </a>
-    <a class="list-group-item" href="#"> Change Password </a>
+    <a class="list-group-item {% if '/accounts/' == request.path %} active {% endif %}" href="{% url 'dashboard' %}"> 
+      Dashboard 
+    </a>
+    
+    <a class="list-group-item {% if '/my_orders/' in request.path %} active {% endif %}" href="{% url 'my_orders' %}"> My 
+      Orders
+    </a>
+    
+    <a class="list-group-item" href="#"> 
+      Edit Profile 
+    </a>
+    
+    <a class="list-group-item" href="#"> 
+      Change Password 
+    </a>
   </ul>
