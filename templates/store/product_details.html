@@ -24,6 +24,19 @@
             {% csrf_token %}
             <article class="content-body">
               <h2 class="title">{{ product.name }}</h2>
+              
+              <!-- Showing average raing and total number of rating for this product -->
+              <div class="rating-stars">
+                <span>
+                  {# fa-star-o means blank star, fa-star-half-o means half star, fa-star means full star #}
+                  <i class="fa fa-star{% if product.average_rating < 0.5 %}-o{% elif product.average_rating < 1 %}-half-o {% endif %}"></i>
+                  <i class="fa fa-star{% if product.average_rating < 1.5 %}-o{% elif product.average_rating < 2 %}-half-o {% endif %}"></i>
+                  <i class="fa fa-star{% if product.average_rating < 2.5 %}-o{% elif product.average_rating < 3 %}-half-o {% endif %}"></i>
+                  <i class="fa fa-star{% if product.average_rating < 3.5 %}-o{% elif product.average_rating < 4 %}-half-o {% endif %}"></i>
+                  <i class="fa fa-star{% if product.average_rating < 4.5 %}-o{% elif product.average_rating < 5 %}-half-o {% endif %}"></i>
+                </span>
+                <span>Total {{ product.count_rating }} reviews</span>
+              </div>
 
               <div class="mb-3">
                 <var class="price h4">$ {{ product.price }}</var>
@@ -196,6 +209,19 @@
       <div class="col-md-9">
         <header class="section-heading">
           <h3>Customer Reviews</h3>
+
+          <!-- Showing average raing and total number of rating for this product -->
+          <div class="rating-stars">
+            <span>
+              {# fa-star-o means blank star, fa-star-half-o means half star, fa-star means full star #}
+              <i class="fa fa-star{% if product.average_rating < 0.5 %}-o{% elif product.average_rating < 1 %}-half-o {% endif %}"></i>
+              <i class="fa fa-star{% if product.average_rating < 1.5 %}-o{% elif product.average_rating < 2 %}-half-o {% endif %}"></i>
+              <i class="fa fa-star{% if product.average_rating < 2.5 %}-o{% elif product.average_rating < 3 %}-half-o {% endif %}"></i>
+              <i class="fa fa-star{% if product.average_rating < 3.5 %}-o{% elif product.average_rating < 4 %}-half-o {% endif %}"></i>
+              <i class="fa fa-star{% if product.average_rating < 4.5 %}-o{% elif product.average_rating < 5 %}-half-o {% endif %}"></i>
+            </span>
+            <span>Total {{ product.count_rating }} reviews</span>
+          </div>
         </header>
         
         {% for review in reviews %}
@@ -210,6 +236,7 @@
                 <h6 class="mb-1">{{ review.user.full_name }}</h6>
                 <div class="rating-stars">
                   <span>
+                    {# fa-star-o means blank star, fa-star-half-o means half star, fa-star means full star #}
                     <i class="fa fa-star{% if review.ratings == 0.5 %}-half-o{% elif review.ratings < 1 %}-o {% endif %}"></i>
                     <i class="fa fa-star{% if review.ratings == 1.5 %}-half-o{% elif review.ratings < 2 %}-o {% endif %}"></i>
                     <i class="fa fa-star{% if review.ratings == 2.5 %}-half-o{% elif review.ratings < 3 %}-o {% endif %}"></i>
