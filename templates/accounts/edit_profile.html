@@ -1,0 +1,99 @@
+{% extends 'base.html' %} 
+
+{% load static %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  {# as we want to display login successful message in the dashboard page after login #} 
+  {% include 'includes/alerts.html' %}
+
+  <div class="container">
+    <div class="row">
+      <aside class="col-md-3">
+        <!--   SIDEBAR   -->
+        {% include 'includes/dashboard_sidebar.html' %}
+        <br />
+        <a class="btn btn-light btn-block" href="{% url 'logout' %}">
+          <i class="fa fa-power-off"></i> <span class="text">Log out</span>
+        </a>
+        <!--   SIDEBAR .//END   -->
+      </aside>
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">Edit Your Profilee </strong>
+          </header>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <form action="" method="POST">
+                  {% csrf_token %}
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="first_name" class="form-label">First Name</label>
+                      <input type="text" name="first_name" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="last_name" class="form-label">Last Name</label>
+                      <input type="text" name="last_name" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="phone_number" class="form-label">Phone Number</label>
+                      <input type="text" name="phone_number" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="profile_picture" class="form-label">Profile Picture</label>
+                      <input type="file" name="profile_picture" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="address_line_1" class="form-label">Address Line 1</label>
+                      <textarea name="address_line_1" id="address_line_1" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="address_line_2" class="form-label">Address Line 2</label>
+                      <textarea name="address_line_2" id="address_line_2" class="form-control"></textarea>
+                    </div>
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" name="city" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="state" class="form-label">State</label>
+                      <input type="text" name="state" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text" name="country" class="form-control">
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+            <!-- row.// -->
+          </div>
+          <!-- card-body .// -->
+          
+        </article>
+        <!-- order-group.// -->
+      </main>
+    </div>
+    <!-- row.// -->
+  </div>
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}
