@@ -12,7 +12,7 @@
       Edit Profile 
     </a>
     
-    <a class="list-group-item" href="#"> 
+    <a class="list-group-item {% if '/change_password/' in request.path %} active {% endif %}" href="{% url 'change_password' %}"> 
       Change Password 
     </a>
   </ul>

@@ -427,8 +427,6 @@ def edit_profile(request):
     # Getting the instance of UserProfile of the curent user if not present then 404
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
-    print(request.user, user_profile)
-
     # Checking for POST request
     if request.method == 'POST':
         # creating instance of UserForm with POST request 
@@ -468,3 +466,42 @@ def edit_profile(request):
     }
 
     return render(request, 'accounts/edit_profile.html', context)
+
+
+@login_required(login_url='login')
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_new_password = request.POST['confirm_new_password']
+
+        user = Account.objects.get(username__exact = request.user.username)
+
+        # checking new_password and confirm_new_password are same or not
+        if new_password == confirm_new_password:
+            # Checking if the current password matches or not
+            success = user.check_password(current_password)
+
+            # if current_password matches then
+            if success:
+                # Setting new_password as the new password foor the user
+                user.set_password(new_password)
+
+                # saving the user
+                user.save()
+
+                # Showing success message
+                messages.success(request, 'Password Changed Successfully!!')
+
+            # If the current_password does not matches
+            else:
+                messages.error(request, 'Please enter the correct Current Password')
+
+        # If new_password and confirm_new_password does not matches then
+        else:
+            messages.error(request, 'New Password and Confirm New Password does not matches')
+
+        # redirecting the user to the 'change_password' page
+        return redirect('change_password')
+    
+    return render(request, 'accounts/change_password.html')
