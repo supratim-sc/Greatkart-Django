@@ -61,7 +61,7 @@ def product_details(request, category_slug, product_slug):
     
     # Fetching all the reviews for particular product
     try:
-        reviews = ReviewRatings.objects.filter(product_id = product.id, status = True).order_by('-updated_at')
+        reviews = ReviewRatings.objects.filter(product_id = product.id, status = True).select_related('user_profile').order_by('-updated_at')
 
     # if any review for this product does not exists
     except ReviewRatings.DoesNotExist:
