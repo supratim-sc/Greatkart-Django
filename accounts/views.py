@@ -18,7 +18,7 @@ from .models import Account, UserProfile
 from carts.models import Cart, CartItem
 from carts.views import _get_cart_id
 
-from orders.models import Order
+from orders.models import Order, OrderProduct
 
 # Create your views here.
 def register(request):
@@ -505,3 +505,26 @@ def change_password(request):
         return redirect('change_password')
     
     return render(request, 'accounts/change_password.html')
+
+
+
+@login_required(login_url='login')
+def order_details(request, order_id):
+    # Fetching the order detials for the particular product
+    order = Order.objects.get(order_number=order_id)
+
+    # Fetching all the products ordered with the order id
+    order_products = OrderProduct.objects.filter(order__order_number=order_id)
+
+    # Calculating the sub total for the order
+    sub_total = 0
+    for item in order_products:
+        sub_total += item.quantity * item.product.price
+
+    context = {
+        'order' : order,
+        'order_products' : order_products,
+        'sub_total' : sub_total,
+    }
+
+    return render(request, 'accounts/order_details.html', context)
