@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 
@@ -12,8 +12,8 @@ from django.core.mail import EmailMessage
 
 import requests
 
-from .forms import RegistrationForm
-from .models import Account
+from .forms import RegistrationForm, UserForm, UserProfileForm
+from .models import Account, UserProfile
 
 from carts.models import Cart, CartItem
 from carts.views import _get_cart_id
@@ -413,4 +413,47 @@ def my_orders(request):
 
 @login_required(login_url='login')
 def edit_profile(request):
-    return render(request, 'accounts/edit_profile.html')
+    # Getting the instance of UserProfile of the curent user if not present then 404
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    print(request.user, user_profile)
+
+    # Checking for POST request
+    if request.method == 'POST':
+        # creating instance of UserForm with POST request 
+        # and having the instance of the current user as we want to feed existing data for the user
+        user_form = UserForm(request.POST, instance=request.user)
+
+        # creating instance of UserProfileForm with POST request 
+        # and passing the files (image files) of the POST request
+        # and having the instance of the current user as we want to feed existing data for the user 
+        user_profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        # Checking if both the forms are valid
+        if user_form.is_valid() and user_profile_form.is_valid():
+            # then saving both the forms with the data submitted by the customer
+            user_form.save()
+            user_profile_form.save()
+
+            # Showing the success message
+            messages.success(request, 'You profile has been updated successfully!')
+
+            # redirecting the user to the same 'edit_profile' page
+            return redirect('edit_profile')
+        
+    # if method is not POST then render the form and the insance data only no request.POST
+    else:
+        # creating instance of UserForm with the instance of the current user as we want to feed existing data for the user
+        user_form = UserForm(instance=request.user)
+
+        # creating instance of UserProfileForm with the instance of the current user as we want to feed existing data for the user 
+        user_profile_form = UserProfileForm(instance=user_profile)
+
+    # Creating context dictionary
+    context = {
+        'user_form': user_form,
+        'user_profile_form': user_profile_form,
+        'user_profile': user_profile,
+    }
+
+    return render(request, 'accounts/edit_profile.html', context)
