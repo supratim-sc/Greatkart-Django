@@ -50,6 +50,16 @@ def register(request):
             # saving the user
             user.save()
 
+            # Creating UserProfile with user.id and default profile_picture after registering to the site
+            # Creating UserProfile object
+            user_profile = UserProfile()
+            # Setting the user id
+            user_profile.user_id = user.id
+            # setting the default profile_picture, this picture stored in the 'media/' folder
+            user_profile.profile_picture = 'user_profile_pictures/default-profile-picture.png'
+            # Saving the UserProfile object
+            user_profile.save()
+
             # AUTHENTICATING user with activation link
             # getting the current site, which we will use in the email
             current_site = get_current_site(request)
