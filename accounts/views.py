@@ -272,20 +272,6 @@ def activate(request, uidb64, token):
     
 
 
-@login_required(login_url='login')
-def dashboard(request):
-    # Fetching orders for the logged in user
-    orders = Order.objects.filter(user_id=request.user.id, is_ordered=True)
-    orders_count = orders.count()
-
-    context = {
-        'orders_count' : orders_count,
-    }
-
-    return render(request, 'accounts/dashboard.html', context)
-
-
-
 def forgotPassword(request):
     # checking if the request method is POST
     if request.method == 'POST':
@@ -408,6 +394,21 @@ def resetPassword(request):
 
     return render(request, 'accounts/reset_password.html')
 
+
+@login_required(login_url='login')
+def dashboard(request):
+    # Fetching orders for the logged in user
+    orders = Order.objects.filter(user_id=request.user.id, is_ordered=True)
+    orders_count = orders.count()
+
+    user_profile = UserProfile.objects.get(user_id=request.user.id)
+
+    context = {
+        'orders_count' : orders_count,
+        'user_profile': user_profile,
+    }
+
+    return render(request, 'accounts/dashboard.html', context)
 
 
 

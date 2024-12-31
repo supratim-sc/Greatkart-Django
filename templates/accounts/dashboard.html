@@ -41,7 +41,7 @@
               <div class="col-md-6">
                 <div class="card text-center">
                   <div class="card-body">
-                    <img src="{% static 'images/avatars/default-profile-picture.png' %}" alt="Defualt User Profile Picture" style="height: 50px; width: 50px; border-radius: 50%;" class="mb-2">
+                    <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" style="height: 50px; width: 50px; border-radius: 50%;" class="mb-2">
                     <p class="mb-0"> 📧 {{ user.email }}</p>
                     <p> 📞 {{ user.phone_number }}</p>
                   </div>
