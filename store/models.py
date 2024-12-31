@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.db.models import Avg, Count
 
 from category.models import Category
-from accounts.models import Account
+from accounts.models import Account, UserProfile
 
 # Create your models here.
 class Product(models.Model):
@@ -86,6 +86,7 @@ class ProductVariation(models.Model):
 class ReviewRatings(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     subject = models.CharField(max_length=100, blank=True)
     review = models.TextField(blank=True)
     ratings = models.FloatField()
