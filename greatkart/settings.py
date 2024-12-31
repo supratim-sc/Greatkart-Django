@@ -169,4 +169,4 @@ CSP_SCRIPT_SRC = ("'self'", "https://*.paypal.com", "https://*.paypalobjects.com
 # CSP_STYLE_SRC = ("'self'", "https://*.paypal.com", "'unsafe-inline'")
 # CSP_IMG_SRC = ("'self'", "data:", "https://*.paypal.com")
 
-
+PAYPAL_ENVIRONMENT = 'sandbox'
