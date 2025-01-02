@@ -3,7 +3,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.contrib import messages
 
-from .models import Product, ReviewRatings
+from .models import Product, ReviewRatings, ProductGallery
 from .forms import ReviewRatingsForm
 
 from category.models import Category
@@ -66,12 +66,15 @@ def product_details(request, category_slug, product_slug):
     # if any review for this product does not exists
     except ReviewRatings.DoesNotExist:
         reviews = None
+
+    product_gallery = ProductGallery.objects.filter(product=product)
     
     context = {
         'product' : product,
         'is_cart_item' : is_cart_item,
         'is_product_ordered' : is_product_ordered,  # sending the product ordered by current user status True/None
         'reviews': reviews, # sending all the reviews for this product
+        'product_gallery' : product_gallery,    # sending the product gallery
     }
     return render(request, 'store/product_details.html', context)
 

@@ -11,12 +11,30 @@
       <div class="row no-gutters">
         <aside class="col-md-6">
           <article class="gallery-wrap">
-            <div class="img-big-wrap">
-              <a href="#"><img src="{{ product.images.url }}" /></a>
+            <!-- Giving custom class name mainImage for styling with CSS and running JQuery script -->
+            <div class="img-big-wrap mainImage">
+              <!-- Centering the image on the main image display box -->
+              <center>
+                <img src="{{ product.images.url }}" />
+              </center>
             </div>
             <!-- img-big-wrap.// -->
           </article>
           <!-- gallery-wrap .end// -->
+           <ul class="thumb">
+            <li>
+              <!-- For having the primary image in the image thumbnail list  -->
+              <a href="{{ product.images.url }}">
+                <img src="{{ product.images.url }}" alt="{{ product.name }} image">
+              </a>
+              <!-- looping over all the product images in product gallery -->
+              {% for product_image in product_gallery %}
+                <a href="{{ product_image.image.url }}">
+                  <img src="{{ product_image.image.url }}" alt="{{ product_image.product.name }} image">
+                </a>
+              {% endfor %}
+            </li>
+           </ul>
         </aside>
         <main class="col-md-6 border-left">
           <!-- Implementing form to submit the product with variation -->

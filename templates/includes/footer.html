@@ -26,3 +26,24 @@
   <!-- //container -->
 </footer>
 <!-- ========================= FOOTER END // ========================= -->
+
+<!-- Including JQuery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!-- Custom JQuery script to  -->
+<script>
+  // When document is loaded and its ready
+  $(document).ready(function(){
+    // selecting the a tags inside the thumb class
+    $('.thumb a').click(function(event){
+      // preventing the default behaviour of the anchor tag
+      event.preventDefault();
+      // setting the src attribute of img tag, inside the mainImage class, to the href attribute of the clicked a tag
+      $('.mainImage img').attr('src', $(this).attr('href'));
+    })
+  })
+</script>
+
+
+</body>
+</html>
