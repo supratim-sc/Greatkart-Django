@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+# importing config from decouple first you need to run 'pip install python-decouple' 
+# We create .env file and we need to add .env in .gitignore file
+# in .env all values are saved as key-value pair and values are in string.
+# in .env file we don't have to give an extra space and values should not be enclosed in quotes
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)     # converting string to boolean
 
 ALLOWED_HOSTS = []
 
@@ -153,12 +159,12 @@ MESSAGE_TAGS = {
 # SMTP Configuration
 
 # SMTP server settings for Gmail
-EMAIL_HOST = 'smtp.gmail.com'  # Gmail's SMTP server
-EMAIL_PORT = 587  # SMTP port for TLS
-EMAIL_HOST_USER = os.environ['EMAIL_USERNAME']  # Your Gmail email address
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']  # Your email password or app password
+EMAIL_HOST = config('EMAIL_HOST')  # Gmail's SMTP server
+EMAIL_PORT = config('EMAIL_PORT', cast=int)  # SMTP port for TLS
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Your Gmail email address
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # Your email password or app password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
-EMAIL_USE_TLS = True  # Use TLS (Transport Layer Security)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)  # Use TLS (Transport Layer Security)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the same email for sending
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
