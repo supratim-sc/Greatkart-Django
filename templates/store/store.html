@@ -174,6 +174,19 @@
                   <div class="price-wrap mt-2">
                     <span class="price">$ {{ product.price }}</span>
                   </div>
+                  
+                  <!-- Showing average raing and total number of rating for this product -->
+                  <div class="rating-stars">
+                    <span>
+                      {# fa-star-o means blank star, fa-star-half-o means half star, fa-star means full star #}
+                      <i class="fa fa-star{% if product.average_rating < 0.5 %}-o{% elif product.average_rating < 1 %}-half-o {% endif %}"></i>
+                      <i class="fa fa-star{% if product.average_rating < 1.5 %}-o{% elif product.average_rating < 2 %}-half-o {% endif %}"></i>
+                      <i class="fa fa-star{% if product.average_rating < 2.5 %}-o{% elif product.average_rating < 3 %}-half-o {% endif %}"></i>
+                      <i class="fa fa-star{% if product.average_rating < 3.5 %}-o{% elif product.average_rating < 4 %}-half-o {% endif %}"></i>
+                      <i class="fa fa-star{% if product.average_rating < 4.5 %}-o{% elif product.average_rating < 5 %}-half-o {% endif %}"></i>
+                    </span>
+                    <span>{{ product.count_rating }} reviews</span>
+                  </div>
                   <!-- price-wrap.// -->
                 </div>
                 <a
