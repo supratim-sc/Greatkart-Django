@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',   # django-session-timeout app's middleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -177,3 +178,7 @@ CSP_SCRIPT_SRC = ("'self'", "https://*.paypal.com", "https://*.paypalobjects.com
 # CSP_IMG_SRC = ("'self'", "data:", "https://*.paypal.com")
 
 
+# django-session-timeout SETTINGS
+SESSION_EXPIRE_SECONDS = 15*60  # 15 minutes
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True   # To expire the session 15 minutes after the last activity
+SESSION_TIMEOUT_REDIRECT = 'accounts/login' # after expire of session redirect the user to login page
