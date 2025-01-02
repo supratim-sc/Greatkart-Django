@@ -96,8 +96,8 @@ class ReviewRatings(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "ReviewRating"
-        verbose_name_plural = "ReviewRatings"
+        verbose_name = "Review Rating"
+        verbose_name_plural = "Review Ratings"
 
     def __str__(self):
         return self.subject
@@ -105,3 +105,15 @@ class ReviewRatings(models.Model):
     def review_first_10_words(self):
         # Split the content into words and join the first 10
         return ' '.join(self.review.split()[:10]) + '...'
+
+
+
+class ProductGallery(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='Product_Gallery')
+
+    def __str__(self):
+        return self.product.name
+    
+    class Meta:
+        verbose_name_plural = 'Product Gallery'
